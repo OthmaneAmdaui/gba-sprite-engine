@@ -6,6 +6,7 @@
 #include <libgba-sprite-engine/sprites/sprite_builder.h>
 #include "raceScene.h"
 #include "red_car.h"
+#include "track1.h"
 
 std::vector<Sprite *> raceScene::sprites() {
     return {
@@ -15,12 +16,14 @@ std::vector<Sprite *> raceScene::sprites() {
 
 std::vector<Background *> raceScene::backgrounds() {
 
-    return {};
+    return {
+            bg_test.get()
+    };
 }
 
 void raceScene::load() {
     foregroundPalette = std::unique_ptr<ForegroundPaletteManager>(new ForegroundPaletteManager(red_carPal,sizeof(red_carPal)));
-    backgroundPalette = std::unique_ptr<BackgroundPaletteManager>(new BackgroundPaletteManager());
+    backgroundPalette = std::unique_ptr<BackgroundPaletteManager>(new BackgroundPaletteManager(track_pal, sizeof(track_pal)));
 
     SpriteBuilder<Sprite> builder;
 
@@ -29,6 +32,9 @@ void raceScene::load() {
             .withSize(SIZE_16_16)
             .withLocation(GBA_SCREEN_HEIGHT/2, GBA_SCREEN_WIDTH/2)
             .buildPtr();
+
+    bg_test = std::unique_ptr<Background>(new Background(1, track_data, sizeof(track_data), track1, sizeof(track1)));
+    bg_test.get()->useMapScreenBlock(16);
 }
 
 void raceScene::tick(u16 keys) {
@@ -51,4 +57,8 @@ void raceScene::tick(u16 keys) {
     } else {
         raceSprite->setVelocity(0, 0);
     }
+
+    scrollY -= 1;
+    bg_test.get()->scroll(scrollX, scrollY);
+
 }

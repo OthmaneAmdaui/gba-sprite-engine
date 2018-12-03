@@ -11,9 +11,12 @@
 class raceScene : public Scene{
 private:
     std::unique_ptr<Sprite> raceSprite;
+    std::unique_ptr<Background> bg_test;
+
+    int scrollX, scrollY;
 
 public:
-    raceScene(std::shared_ptr<GBAEngine> engine) : Scene(engine) {}
+    raceScene(std::shared_ptr<GBAEngine> engine) : Scene(engine), scrollX(0), scrollY(0) {}
 
     std::vector<Sprite *> sprites() override;
     std::vector<Background *> backgrounds() override;
