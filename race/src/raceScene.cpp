@@ -8,6 +8,9 @@
 #include "red_car.h"
 #include "track1.h"
 
+#define LIMITE_RIGHT 29
+#define LIMITE_LEFT 46
+
 std::vector<Sprite *> raceScene::sprites() {
     return {
             raceSprite.get()
@@ -30,7 +33,8 @@ void raceScene::load() {
     raceSprite = builder
             .withData(red_carTiles, sizeof(red_carTiles))
             .withSize(SIZE_16_16)
-            .withLocation(GBA_SCREEN_HEIGHT/2, GBA_SCREEN_WIDTH/2)
+            .withLocation(GBA_SCREEN_WIDTH/4, GBA_SCREEN_HEIGHT/2)
+            .withinBounds()
             .buildPtr();
 
     bg_test = std::unique_ptr<Background>(new Background(1, track_data, sizeof(track_data), track1, sizeof(track1)));
@@ -40,20 +44,22 @@ void raceScene::load() {
 void raceScene::tick(u16 keys) {
     if(keys & KEY_LEFT) {
         raceSprite->setVelocity(-2 ,0);
-        if(raceSprite->getX() <= 35)
-            raceSprite->moveTo(35,raceSprite->getY());
+        if(raceSprite->getX() <= LIMITE_LEFT)
+            raceSprite->moveTo(LIMITE_LEFT,raceSprite->getY());
     } else if(keys & KEY_RIGHT) {
         raceSprite->setVelocity(+2, 0);
-        if(raceSprite->getX() >= (GBA_SCREEN_WIDTH - 35 - raceSprite->getWidth()))
-            raceSprite->moveTo(GBA_SCREEN_WIDTH - 35 - raceSprite->getWidth(),raceSprite->getY());
+        if(raceSprite->getX() >= (GBA_SCREEN_WIDTH - LIMITE_RIGHT - raceSprite->getWidth()))
+            raceSprite->moveTo(GBA_SCREEN_WIDTH - LIMITE_RIGHT - raceSprite->getWidth(),raceSprite->getY());
     } else if (keys & KEY_UP) {
-        raceSprite->setVelocity(0, -2);
+        if(keys & KEY_RIGHT) {
+            raceSprite->setVelocity(+2, -2);
+        } else if(keys & KEY_LEFT) {
+            raceSprite->setVelocity(+2, -2);
+        }else{
+            raceSprite->setVelocity(0, -2);
+        }
     } else if(keys & KEY_DOWN) {
         raceSprite->setVelocity(0, +2);
-    } else if((keys & KEY_UP) && (keys & KEY_LEFT)) {
-        raceSprite->setVelocity(-2, -2);
-    } else if((keys & (KEY_UP|KEY_RIGHT))){// && (keys & KEY_RIGHT)) {
-        raceSprite->setVelocity(+2, -2);
     } else {
         raceSprite->setVelocity(0, 0);
     }

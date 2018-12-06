@@ -10,7 +10,7 @@
 template<typename T> class SpriteBuilder {
 private:
     u32 imageSize;
-    bool stayWithinBounds;
+    bool stayWithinBounds = false;
     const void *imageData;
     u32 x, y, dx, dy;
     u32 numberOfFrames, animationDelay;
