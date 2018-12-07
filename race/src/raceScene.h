@@ -11,7 +11,7 @@
 class raceScene : public Scene{
 private:
     std::unique_ptr<Sprite> raceSprite;
-    std::unique_ptr<Background> bg_test;
+    std::unique_ptr<Background> bg_track1;
 
     int scrollX, scrollY;
 

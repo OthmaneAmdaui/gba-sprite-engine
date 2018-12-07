@@ -20,7 +20,7 @@ std::vector<Sprite *> raceScene::sprites() {
 std::vector<Background *> raceScene::backgrounds() {
 
     return {
-            bg_test.get()
+            bg_track1.get()
     };
 }
 
@@ -37,8 +37,8 @@ void raceScene::load() {
             .withinBounds()
             .buildPtr();
 
-    bg_test = std::unique_ptr<Background>(new Background(1, track_data, sizeof(track_data), track1, sizeof(track1)));
-    bg_test.get()->useMapScreenBlock(16);
+    bg_track1 = std::unique_ptr<Background>(new Background(1, track_data, sizeof(track_data), track1, sizeof(track1)));
+    bg_track1.get()->useMapScreenBlock(16);
 }
 
 void raceScene::tick(u16 keys) {
@@ -65,6 +65,6 @@ void raceScene::tick(u16 keys) {
     }
 
     scrollY -= 1;
-    bg_test.get()->scroll(scrollX, scrollY);
+    bg_track1.get()->scroll(scrollX, scrollY);
 
 }
