@@ -63,7 +63,7 @@ void raceScene::tick(u16 keys) {
     } else {
         raceSprite->setVelocity(0, 0);
     }
-
+    
     scrollY -= 1;
     bg_track1.get()->scroll(scrollX, scrollY);
 
