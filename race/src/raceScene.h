@@ -11,9 +11,12 @@
 class raceScene : public Scene{
 private:
     std::unique_ptr<Sprite> raceSprite;
+    std::unique_ptr<Sprite> sp_scrollingCar;
     std::unique_ptr<Background> bg_track1;
 
     int scrollX, scrollY;
+    int teller = 0;
+    int timerSec = -1;
 
 public:
     raceScene(std::shared_ptr<GBAEngine> engine) : Scene(engine), scrollX(0), scrollY(0) {}

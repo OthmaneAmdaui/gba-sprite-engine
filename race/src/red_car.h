@@ -5,10 +5,6 @@
 #ifndef GBA_SPRITE_ENGINE_PROJECT_RED_CAR_H
 #define GBA_SPRITE_ENGINE_PROJECT_RED_CAR_H
 
-#endif //GBA_SPRITE_ENGINE_PROJECT_RED_CAR_H
-
-
-
 //{{BLOCK(red_car)
 
 //======================================================================
@@ -85,3 +81,6 @@ const unsigned short red_carPal[256] __attribute__((aligned(4)))=
         };
 
 //}}BLOCK(red_car)
+
+
+#endif //GBA_SPRITE_ENGINE_PROJECT_RED_CAR_H

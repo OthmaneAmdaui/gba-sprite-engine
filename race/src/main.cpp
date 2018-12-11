@@ -4,12 +4,15 @@
 
 #include <libgba-sprite-engine/gba_engine.h>
 #include "raceScene.h"
+#include "timer.h"
 
 int main() {
     std::shared_ptr<GBAEngine> engine(new GBAEngine());
 
     raceScene* startScene = new raceScene(engine);
     engine->setScene(startScene);
+
+    initTimer();
 
     while (true) {
         engine->update();

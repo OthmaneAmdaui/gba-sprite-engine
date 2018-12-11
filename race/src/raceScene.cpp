@@ -2,18 +2,21 @@
 // Created by Othmane Amdaui on 01-Dec-18.
 //
 
-#include <libgba-sprite-engine/gba_engine.h>
+#include <libgba-sprite-engine/sprites/affine_sprite.h>
 #include <libgba-sprite-engine/sprites/sprite_builder.h>
+#include <libgba-sprite-engine/gba/tonc_memmap.h>
+#include <libgba-sprite-engine/background/text_stream.h>
 #include "raceScene.h"
 #include "red_car.h"
 #include "track1.h"
+#include "timer.h"
 
 #define LIMITE_RIGHT 29
 #define LIMITE_LEFT 46
 
 std::vector<Sprite *> raceScene::sprites() {
     return {
-            raceSprite.get()
+            raceSprite.get(), sp_scrollingCar.get()
     };
 }
 
@@ -34,11 +37,20 @@ void raceScene::load() {
             .withData(red_carTiles, sizeof(red_carTiles))
             .withSize(SIZE_16_16)
             .withLocation(GBA_SCREEN_WIDTH/4, GBA_SCREEN_HEIGHT/2)
-            .withinBounds()
+            //.withinBounds()
+            .buildPtr();
+
+    sp_scrollingCar = builder
+            .withData(red_carTiles, sizeof(red_carTiles))
+            .withSize(SIZE_16_16)
+            .withLocation(60, GBA_SCREEN_HEIGHT/2)
+            //.withinBounds()
             .buildPtr();
 
     bg_track1 = std::unique_ptr<Background>(new Background(1, track_data, sizeof(track_data), track1, sizeof(track1)));
     bg_track1.get()->useMapScreenBlock(16);
+
+
 }
 
 void raceScene::tick(u16 keys) {
@@ -63,8 +75,29 @@ void raceScene::tick(u16 keys) {
     } else {
         raceSprite->setVelocity(0, 0);
     }
-    
+
     scrollY -= 1;
     bg_track1.get()->scroll(scrollX, scrollY);
 
+    //Autoscroller
+    if(REG_TM3D != timerSec ) {
+        timerSec = REG_TM3D;
+
+        if (teller >= GBA_SCREEN_HEIGHT + 16) {
+            teller = 0;
+            TextStream::instance().clear();
+        }
+        sp_scrollingCar->moveTo(60, teller);
+        teller++;
+    }
+    if(keys & KEY_START)  // pause by disabling timer
+        REG_TM2CNT ^= TM_ENABLE;
+
+    if(keys & KEY_SELECT) // pause by enabling cascade
+        REG_TM2CNT ^= TM_CASCADE;
+
+    //Collision
+    if(raceSprite->collidesWith(*sp_scrollingCar)){
+        TextStream::instance().setText("Raak en kapot", 3, 8);
+    }
 }
