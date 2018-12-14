@@ -6,6 +6,10 @@
 #include <libgba-sprite-engine/sprites/sprite_builder.h>
 #include <libgba-sprite-engine/gba/tonc_memmap.h>
 #include <libgba-sprite-engine/background/text_stream.h>
+#include <cstdlib>
+#include <iostream>
+#include <sstream>
+#include <string>
 #include "raceScene.h"
 #include "red_car.h"
 #include "track1.h"
@@ -50,7 +54,10 @@ void raceScene::load() {
     bg_track1 = std::unique_ptr<Background>(new Background(1, track_data, sizeof(track_data), track1, sizeof(track1)));
     bg_track1.get()->useMapScreenBlock(16);
 
-
+    initTimer0();
+    startTimer0();
+    initTimer1();
+    startTimer1();
 }
 
 void raceScene::tick(u16 keys) {
@@ -79,25 +86,41 @@ void raceScene::tick(u16 keys) {
     scrollY -= 1;
     bg_track1.get()->scroll(scrollX, scrollY);
 
-    //Autoscroller
-    if(REG_TM3D != timerSec ) {
-        timerSec = REG_TM3D;
 
-        if (teller >= GBA_SCREEN_HEIGHT + 16) {
-            teller = 0;
-            TextStream::instance().clear();
-        }
-        sp_scrollingCar->moveTo(60, teller);
-        teller++;
-    }
-    if(keys & KEY_START)  // pause by disabling timer
-        REG_TM2CNT ^= TM_ENABLE;
 
-    if(keys & KEY_SELECT) // pause by enabling cascade
-        REG_TM2CNT ^= TM_CASCADE;
 
     //Collision
     if(raceSprite->collidesWith(*sp_scrollingCar)){
-        TextStream::instance().setText("Raak en kapot", 3, 8);
+        isHit = true;
+        if(score > 0){score = score - 5;}
+        else{score = 0;}
+        TextStream::instance().setText("-5", 1, 1);
     }
+    //Timer0; T = 1s
+    if(REG_TM1D != timer0){
+        timer0 = REG_TM1D;
+
+        timerSec = timer0%60;
+        timerMin = (timer0%3600)/60;
+        timerHour = timer0/3600;
+
+        //TextStream::instance()<< "H:" << timerHour << "M:" << timerMin << "S:" <<timerSec;
+        TextStream::instance().clear();
+        std::string score_str = std::to_string(score);
+        TextStream::instance().setText(score_str, 0, 1);
+        score++;
+
+    }
+    if (scroller >= GBA_SCREEN_HEIGHT + 16) {
+        scroller = 0;
+    }
+    sp_scrollingCar->moveTo(50, scroller);
+    scroller ++;
+
+    //Timer1 T < 1s
+    if(REG_TM3D != timer1 ) {
+        timer1 = REG_TM3D;
+        //nog niks
+    }
+
 }

@@ -15,8 +15,15 @@ private:
     std::unique_ptr<Background> bg_track1;
 
     int scrollX, scrollY;
-    int teller = 0;
-    int timerSec = -1;
+
+    int scroller = 0;
+    u32 timer0 = -1;
+    u32 timer1 = -1;
+    int timerSec = 0;
+    int timerMin = 0;
+    int timerHour = 0;
+    int score = 0;
+    bool isHit = false;
 
 public:
     raceScene(std::shared_ptr<GBAEngine> engine) : Scene(engine), scrollX(0), scrollY(0) {}

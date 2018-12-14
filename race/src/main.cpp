@@ -12,8 +12,6 @@ int main() {
     raceScene* startScene = new raceScene(engine);
     engine->setScene(startScene);
 
-    initTimer();
-
     while (true) {
         engine->update();
         engine->delay(1000);
