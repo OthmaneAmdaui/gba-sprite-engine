@@ -12,17 +12,19 @@ class raceScene : public Scene{
 private:
     std::unique_ptr<Sprite> raceSprite;
     std::unique_ptr<Sprite> sp_scrollingCar;
+    std::unique_ptr<Sprite> sp_heart;
     std::unique_ptr<Background> bg_track1;
 
     int scrollX, scrollY;
 
     int scroller = 0;
-    u32 timer0 = -1;
-    u32 timer1 = -1;
+    int timer0 = -1;
+    int timer1 = -1;
     int timerSec = 0;
     int timerMin = 0;
     int timerHour = 0;
     int score = 0;
+    int levens = 6;
     bool isHit = false;
 
 public:
