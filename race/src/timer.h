@@ -8,7 +8,7 @@
 
 void initTimer0();
 void initTimer1();
-void startTimer0();
-void startTimer1();
+void toggleTimer0();
+void toggleTimer1();
 
 #endif //GBA_SPRITE_ENGINE_PROJECT_TIMER_H

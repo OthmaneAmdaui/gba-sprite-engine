@@ -8,11 +8,18 @@
 
 #include <libgba-sprite-engine/scene.h>
 
+#define LIMITE_RIGHT 29
+#define LIMITE_LEFT 46
+
 class raceScene : public Scene{
 private:
     std::unique_ptr<Sprite> raceSprite;
     std::unique_ptr<Sprite> sp_scrollingCar;
-    std::unique_ptr<Sprite> sp_heart;
+    std::unique_ptr<Sprite> sp_heart1;
+    std::unique_ptr<Sprite> sp_heart2;
+    std::unique_ptr<Sprite> sp_heart3;
+    std::unique_ptr<Sprite> sp_heart4;
+    std::unique_ptr<Sprite> sp_heart5;
     std::unique_ptr<Background> bg_track1;
 
     int scrollX, scrollY;
@@ -20,12 +27,10 @@ private:
     int scroller = 0;
     int timer0 = -1;
     int timer1 = -1;
-    int timerSec = 0;
-    int timerMin = 0;
-    int timerHour = 0;
     int score = 0;
-    int levens = 6;
+    int life = 6;
     bool isHit = false;
+    bool isDead = false;
 
 public:
     raceScene(std::shared_ptr<GBAEngine> engine) : Scene(engine), scrollX(0), scrollY(0) {}
