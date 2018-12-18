@@ -20,7 +20,7 @@
 
 std::vector<Sprite *> raceScene::sprites() {
     return {
-            raceSprite.get(), sp_scrollingCar.get()
+            raceSprite.get(), sp_scrollingCar.get(), sp_heart.get()
     };
 }
 
@@ -48,6 +48,12 @@ void raceScene::load() {
             .withData(red_carTiles, sizeof(red_carTiles))
             .withSize(SIZE_16_16)
             .withLocation(60, GBA_SCREEN_HEIGHT/2)
+            //.withinBounds()
+            .buildPtr();
+    sp_heart = builder
+            .withData(heartTiles, sizeof(heartTiles))
+            .withSize(SIZE_16_16)
+            .withLocation(GBA_SCREEN_WIDTH-21, 9)
             //.withinBounds()
             .buildPtr();
 
@@ -87,15 +93,12 @@ void raceScene::tick(u16 keys) {
     bg_track1.get()->scroll(scrollX, scrollY);
 
 
-
-
     //Collision
     if(raceSprite->collidesWith(*sp_scrollingCar)){
         isHit = true;
-        if(score > 0){score = score - 5;}
-        else{score = 0;}
-        TextStream::instance().setText("-5", 1, 1);
+        TextStream::instance().setText("-5", 1, 2);
     }
+
     //Timer0; T = 1s
     if(REG_TM1D != timer0){
         timer0 = REG_TM1D;
@@ -104,13 +107,26 @@ void raceScene::tick(u16 keys) {
         timerMin = (timer0%3600)/60;
         timerHour = timer0/3600;
 
+        if(isHit == true){
+            if(levens > 0){
+                levens --;
+                if(score > 0){score = score - 6;}
+                if (score <= 0){score = 0;}
+            }
+            if(levens == 0){/*dood*/}
+            isHit = false;
+        }
+
         //TextStream::instance()<< "H:" << timerHour << "M:" << timerMin << "S:" <<timerSec;
         TextStream::instance().clear();
         std::string score_str = std::to_string(score);
         TextStream::instance().setText(score_str, 0, 1);
-        score++;
+        std::string levens_str = std::to_string(levens);
+        TextStream::instance().setText(levens_str, 0, 27);
 
+        score++;
     }
+
     if (scroller >= GBA_SCREEN_HEIGHT + 16) {
         scroller = 0;
     }
