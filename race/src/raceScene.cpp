@@ -96,76 +96,30 @@ void raceScene::load() {
 void raceScene::tick(u16 keys) {
     std::string score_str = std::to_string(score);
 
-    //Car movement
-    if(keys & KEY_LEFT) {
-        sp_red_car->setVelocity(-2 ,0);
-        if(sp_red_car->getX() <= LIMITE_LEFT)
-            sp_red_car->moveTo(LIMITE_LEFT,sp_red_car->getY());
-    } else if(keys & KEY_RIGHT) {
-        sp_red_car->setVelocity(+2, 0);
-        if(sp_red_car->getX() >= (GBA_SCREEN_WIDTH - LIMITE_RIGHT - sp_red_car->getWidth()))
-            sp_red_car->moveTo(GBA_SCREEN_WIDTH - LIMITE_RIGHT - sp_red_car->getWidth(),sp_red_car->getY());
-    } else if (keys & KEY_UP) {
-        if(keys & KEY_RIGHT) {
-            sp_red_car->setVelocity(+2, -2);
-        } else if(keys & KEY_LEFT) {
-            sp_red_car->setVelocity(+2, -2);
-        }else{
-            sp_red_car->setVelocity(0, -2);
-        }
-    } else if(keys & KEY_DOWN) {
-        sp_red_car->setVelocity(0, +2);
-    } else {
-        sp_red_car->setVelocity(0, 0);
-    }
-
-    //Collision
-    if(sp_red_car->collidesWith(*sp_scrollingCar)){
-        isHit = true;
-        TextStream::instance().setText("-5", 1, 2);
-    }
-
-    //Timer0; T = 1s
-    if(REG_TM1D != timer0){
-        timer0 = REG_TM1D;
-
-        if(isHit == true){
-            if(life > 0){
-                if(score > 0){score = score - 6;}
-                if (score <= 0){score = 0;}
-
-                life --;
-                switch (life){
-                    case 4:
-                        sp_heart5->moveTo(GBA_SCREEN_HEIGHT,GBA_SCREEN_HEIGHT);
-                        break;
-                    case 3:
-                        sp_heart4->moveTo(GBA_SCREEN_HEIGHT,GBA_SCREEN_HEIGHT);
-                        break;
-                    case 2:
-                        sp_heart3->moveTo(GBA_SCREEN_HEIGHT,GBA_SCREEN_HEIGHT);
-                        break;
-                    case 1:
-                        sp_heart2->moveTo(GBA_SCREEN_HEIGHT,GBA_SCREEN_HEIGHT);
-                        break;
-                    case 0:
-                        sp_heart1->moveTo(GBA_SCREEN_HEIGHT,GBA_SCREEN_HEIGHT);
-                        break;
-                }
-            }
-            else{
-                score = score - 5;
-                isDead = true;
-            }
-            isHit = false;
-        }
-        TextStream::instance().clear();
-        TextStream::instance().setText(score_str, 0, 1);
-        score++;
-    }
-
-    //Dead
+    //Dead?
     if(!isDead){
+        //Car movement
+        if(keys & KEY_LEFT) {
+            sp_red_car->setVelocity(-2 ,0);
+            if(sp_red_car->getX() <= LIMITE_LEFT)
+                sp_red_car->moveTo(LIMITE_LEFT,sp_red_car->getY());
+        } else if(keys & KEY_RIGHT) {
+            sp_red_car->setVelocity(+2, 0);
+            if(sp_red_car->getX() >= (GBA_SCREEN_WIDTH - LIMITE_RIGHT - sp_red_car->getWidth()))
+                sp_red_car->moveTo(GBA_SCREEN_WIDTH - LIMITE_RIGHT - sp_red_car->getWidth(),sp_red_car->getY());
+        } else if (keys & KEY_UP) {
+            if(keys & KEY_RIGHT) {
+                sp_red_car->setVelocity(+2, -2);
+            } else if(keys & KEY_LEFT) {
+                sp_red_car->setVelocity(+2, -2);
+            }else{
+                sp_red_car->setVelocity(0, -2);
+            }
+        } else if(keys & KEY_DOWN) {
+            sp_red_car->setVelocity(0, +2);
+        } else {
+            sp_red_car->setVelocity(0, 0);
+        }
         //Scroller for background
         scrollY -= 1;
         bg_track1.get()->scroll(scrollX, scrollY);
@@ -184,6 +138,50 @@ void raceScene::tick(u16 keys) {
         TextStream::instance().setText("YOU DIED",8,12);
         TextStream::instance().setText("SCORE: ",9,13);
         TextStream::instance().setText(score_str,9,19);
+
+        if(keys & KEY_START){
+            engine->transitionIntoScene(new startScene(engine), new FadeOutScene(10));
+        }
+    }
+
+    //Collision
+    isHit_mem = isHit;
+    if(sp_red_car->collidesWith(*sp_scrollingCar)){isHit = true;}
+    else{isHit = false;}
+
+    if(isHit == true & isHit_mem != true){
+        if(score > 0){score = score - 6;}
+        if (score <= 0){score = 0;}
+        TextStream::instance().setText("-5", 1, 2);
+        if(life > 0){
+            life --;
+            switch (life){
+                case 4:
+                    sp_heart5->moveTo(GBA_SCREEN_HEIGHT,GBA_SCREEN_HEIGHT);
+                    break;
+                case 3:
+                    sp_heart4->moveTo(GBA_SCREEN_HEIGHT,GBA_SCREEN_HEIGHT);
+                    break;
+                case 2:
+                    sp_heart3->moveTo(GBA_SCREEN_HEIGHT,GBA_SCREEN_HEIGHT);
+                    break;
+                case 1:
+                    sp_heart2->moveTo(GBA_SCREEN_HEIGHT,GBA_SCREEN_HEIGHT);
+                    break;
+                case 0:
+                    sp_heart1->moveTo(GBA_SCREEN_HEIGHT,GBA_SCREEN_HEIGHT);
+                    break;
+            }
+        }
+        else{isDead = true;}
+    }
+
+    //Timer0; T = 1s
+    if(REG_TM1D != timer0){
+        timer0 = REG_TM1D;
+        TextStream::instance().clear();
+        score++;
+        TextStream::instance().setText(score_str, 0, 1);
     }
 
 

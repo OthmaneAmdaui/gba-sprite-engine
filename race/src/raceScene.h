@@ -30,6 +30,7 @@ private:
     int score = 0;
     int life = 6;
     bool isHit = false;
+    bool isHit_mem = false;
     bool isDead = false;
 
 public:

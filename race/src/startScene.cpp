@@ -12,9 +12,6 @@
 #include "chooseCarScene.h"
 #include "sprite_data.h"
 
-
-
-
 std::vector<Background *> startScene::backgrounds() {
     return {};
 }
@@ -55,10 +52,10 @@ void startScene::tick(u16 keys) {
                 sp_arrow->moveTo(64, Y_BOTTOM);
             }
             else if(keys & KEY_START) {
-                if (!engine->isTransitioning()) {
-                    TextStream::instance() << "Prepare for the race!!!";
+                //if (!engine->isTransitioning()) {
+                    TextStream::instance().setText("Prepare for the race!!!",0,0);
                     engine->transitionIntoScene(new raceScene(engine), new FadeOutScene(2));
-                }
+                //}
             }
             break;
         case Y_BOTTOM:
