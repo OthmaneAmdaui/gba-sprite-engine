@@ -21,7 +21,7 @@
 
 std::vector<Sprite *> raceScene::sprites() {
     return {
-            raceSprite.get(),
+            sp_red_car.get(),
             sp_scrollingCar.get(),
             sp_heart1.get(),
             sp_heart2.get(),
@@ -44,7 +44,7 @@ void raceScene::load() {
 
     SpriteBuilder<Sprite> builder;
 
-    raceSprite = builder
+    sp_red_car = builder
             .withData(red_carTiles, sizeof(red_carTiles))
             .withSize(SIZE_16_16)
             .withLocation(GBA_SCREEN_WIDTH/4, GBA_SCREEN_HEIGHT/2)
@@ -98,29 +98,29 @@ void raceScene::tick(u16 keys) {
 
     //Car movement
     if(keys & KEY_LEFT) {
-        raceSprite->setVelocity(-2 ,0);
-        if(raceSprite->getX() <= LIMITE_LEFT)
-            raceSprite->moveTo(LIMITE_LEFT,raceSprite->getY());
+        sp_red_car->setVelocity(-2 ,0);
+        if(sp_red_car->getX() <= LIMITE_LEFT)
+            sp_red_car->moveTo(LIMITE_LEFT,sp_red_car->getY());
     } else if(keys & KEY_RIGHT) {
-        raceSprite->setVelocity(+2, 0);
-        if(raceSprite->getX() >= (GBA_SCREEN_WIDTH - LIMITE_RIGHT - raceSprite->getWidth()))
-            raceSprite->moveTo(GBA_SCREEN_WIDTH - LIMITE_RIGHT - raceSprite->getWidth(),raceSprite->getY());
+        sp_red_car->setVelocity(+2, 0);
+        if(sp_red_car->getX() >= (GBA_SCREEN_WIDTH - LIMITE_RIGHT - sp_red_car->getWidth()))
+            sp_red_car->moveTo(GBA_SCREEN_WIDTH - LIMITE_RIGHT - sp_red_car->getWidth(),sp_red_car->getY());
     } else if (keys & KEY_UP) {
         if(keys & KEY_RIGHT) {
-            raceSprite->setVelocity(+2, -2);
+            sp_red_car->setVelocity(+2, -2);
         } else if(keys & KEY_LEFT) {
-            raceSprite->setVelocity(+2, -2);
+            sp_red_car->setVelocity(+2, -2);
         }else{
-            raceSprite->setVelocity(0, -2);
+            sp_red_car->setVelocity(0, -2);
         }
     } else if(keys & KEY_DOWN) {
-        raceSprite->setVelocity(0, +2);
+        sp_red_car->setVelocity(0, +2);
     } else {
-        raceSprite->setVelocity(0, 0);
+        sp_red_car->setVelocity(0, 0);
     }
 
     //Collision
-    if(raceSprite->collidesWith(*sp_scrollingCar)){
+    if(sp_red_car->collidesWith(*sp_scrollingCar)){
         isHit = true;
         TextStream::instance().setText("-5", 1, 2);
     }

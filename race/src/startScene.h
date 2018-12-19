@@ -12,9 +12,12 @@
 
 class startScene : public Scene {
 private:
-    std::unique_ptr<Sprite> arrow;
+    std::unique_ptr<Sprite> sp_arrow;
 
-
+    bool up_pressed = false;
+    bool up_mem = false;
+    bool down_pressed = false;
+    bool down_mem = false;
 public:
     std::vector<Sprite *> sprites() override;
     std::vector<Background *> backgrounds() override;

@@ -13,7 +13,7 @@
 
 class raceScene : public Scene{
 private:
-    std::unique_ptr<Sprite> raceSprite;
+    std::unique_ptr<Sprite> sp_red_car;
     std::unique_ptr<Sprite> sp_scrollingCar;
     std::unique_ptr<Sprite> sp_heart1;
     std::unique_ptr<Sprite> sp_heart2;

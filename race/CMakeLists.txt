@@ -6,7 +6,7 @@ add_executable(${PROJECT_NAME}.elf
         src/raceScene.h
         src/red_car.h
         src/track1.h
-        src/timer.cpp src/timer.h src/startScene.h src/startScene.cpp src/arrow.h src/sprite_data.h)
+        src/timer.cpp src/timer.h src/startScene.h src/startScene.cpp src/arrow.h src/sprite_data.h src/chooseCarScene.h src/chooseCarScene.cpp)
 
 target_link_libraries(${PROJECT_NAME}.elf gba-sprite-engine)
 

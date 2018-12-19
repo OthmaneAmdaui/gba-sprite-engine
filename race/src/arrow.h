@@ -5,11 +5,11 @@
 #ifndef GBA_SPRITE_ENGINE_PROJECT_FRAME_H
 #define GBA_SPRITE_ENGINE_PROJECT_FRAME_H
 
-//{{BLOCK(arrow)
+//{{BLOCK(sp_arrow)
 
 //======================================================================
 //
-//	arrow, 16x16@8,
+//	sp_arrow, 16x16@8,
 //	+ palette 256 entries, not compressed
 //	+ 4 tiles not compressed
 //	Total size: 512 + 256 = 768
@@ -80,7 +80,7 @@ const unsigned short arrowPal[256] __attribute__((aligned(4)))=
                 0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,
         };
 
-//}}BLOCK(arrow)
+//}}BLOCK(sp_arrow)
 
 
 #endif //GBA_SPRITE_ENGINE_PROJECT_FRAME_H
