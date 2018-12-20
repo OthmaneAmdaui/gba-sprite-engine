@@ -25,6 +25,9 @@ std::vector<Sprite *> raceScene::sprites() {
             sp_red_car.get(),
             sp_scrollingCar.get(),
             sp_scrollingCar2.get(),
+            sp_scrollingCar3.get(),
+            sp_scrollingCar4.get(),
+            sp_scrollingCar5.get(),
             sp_heart1.get(),
             sp_heart2.get(),
             sp_heart3.get(),
@@ -52,13 +55,18 @@ void raceScene::load() {
             .withLocation(GBA_SCREEN_WIDTH/4, GBA_SCREEN_HEIGHT/2)
             //.withinBounds()
             .buildPtr();
-    createObstacle();
-    sp_scrollingCar2 = builder
+    srand(time(NULL));
+    createObstacle(2);
+    createObstacle(3);
+    createObstacle(4);
+    createObstacle(5);
+    createObstacle(6);
+    /*sp_scrollingCar = builder
             .withData(blue_carTiles, sizeof(blue_carTiles))
             .withSize(SIZE_16_16)
             .withLocation(160, GBA_SCREEN_HEIGHT/2)
             //.withinBounds()
-            .buildPtr();
+            .buildPtr();*/
 
     sp_heart1 = builder
             .withData(heartTiles, sizeof(heartTiles))
@@ -98,7 +106,28 @@ void raceScene::load() {
 
 void raceScene::tick(u16 keys) {
     std::string score_str = std::to_string(score);
-
+    // first time
+    if(secCounter == 1) //
+    {
+        //startMovingObstacle1 = true;
+        move[0] = true;
+    }
+    if(secCounter == 2)
+    {
+        move[1] = true;
+    }
+    /*if(firstLoad){
+        // 3sec later start move the first obstacle
+        switch (secCounter){
+            case 1:
+                startMovingObstacle1 = true;
+                move1 = true;
+                secCounter = 0;
+                break;
+            // case 5:
+            // firstLoad =false;
+        }
+    }*/
     //Dead?
     if(!isDead){
         //Car movement
@@ -123,20 +152,89 @@ void raceScene::tick(u16 keys) {
         } else {
             sp_red_car->setVelocity(0, 0);
         }
+
         //Scroller for background
         scrollY -= 1;
         bg_track1.get()->scroll(scrollX, scrollY);
+
         //Scroller for objects
-        if (scroller >= GBA_SCREEN_HEIGHT + 16) {
+       // if(startMovingObstacle1)
+        //{
+            if (scroller >= GBA_SCREEN_HEIGHT + 16) {
+                scroller = 0;
+                xPos[0] = XMIN + rand() % ((XMAX + 1)-XMIN);
+                //move1 = false;
+                //obstaclePassed = true;
+                //createObstacle();
+                // clear obstacle (car sprite)
+                // create Obstacle
+            }
+            if (scroller2 >= GBA_SCREEN_HEIGHT + 16) {
+                scroller2 = 0;
+                xPos[1] = XMIN + rand() % ((XMAX + 1) - XMIN);
+            }
+            if (scroller3 >= GBA_SCREEN_HEIGHT + 16) {
+                scroller3 = 0;
+                xPos[2] = XMIN + rand() % ((XMAX + 1) - XMIN);
+            }
+            if(move[0])
+            {
+                sp_scrollingCar->moveTo(xPos[0], scroller);
+                scroller +=velocity;
+                //move[0] = false;
+            }
+            if(move[1])
+            {
+                sp_scrollingCar2->moveTo(xPos[1], scroller2);
+                scroller2 +=velocity;
+                secCounter = 0;             // wait until next time
+                move[1] = false;
+                move[0] = false;
+            }
+
+            if(move[2])
+            {
+                sp_scrollingCar3->moveTo(xPos[2], scroller3);
+                scroller3 +=velocity;
+                move[2] = false;
+            }
+//            sp_scrollingCar->moveTo(xPos[0], scroller);
+//            scroller +=velocity;
+        //}
+/*        if (scroller >= GBA_SCREEN_HEIGHT + 16) {
             scroller = 0;
-            xPos = XMIN + rand() % ((XMAX + 1)-XMIN);
+            xPos[0] = XMIN + rand() % ((XMAX + 1)-XMIN);
+            //createObstacle();
             // clear obstacle (car sprite)
             // create Obstacle
         }
-        sp_scrollingCar->moveTo(xPos, scroller);
-        scroller ++;
-        sp_scrollingCar2->moveTo(160, scroller2);
-        scroller2 ++;
+        if (scroller2 >= GBA_SCREEN_HEIGHT + 16) {
+            scroller2 = 0;
+            xPos[1] = XMIN + rand() % ((XMAX + 1) - XMIN);
+        }
+        if (scroller3 >= GBA_SCREEN_HEIGHT + 16) {
+            scroller3 = 0;
+            xPos[2] = XMIN + rand() % ((XMAX + 1) - XMIN);
+        }
+        if (scroller4 >= GBA_SCREEN_HEIGHT + 16) {
+            scroller4 = 0;
+            xPos[3] = XMIN + rand() % ((XMAX + 1) - XMIN);
+        }
+        if (scroller5 >= GBA_SCREEN_HEIGHT + 16) {
+            scroller5 = 0;
+            xPos[4] = XMIN + rand() % ((XMAX + 1) - XMIN);
+        }
+        sp_scrollingCar->moveTo(xPos[0], scroller);
+        scroller +=velocity;
+        sp_scrollingCar2->moveTo(xPos[1], scroller2);
+        scroller2 +=velocity;
+        sp_scrollingCar3->moveTo(xPos[2], scroller3);
+        scroller3 +=velocity;
+        sp_scrollingCar4->moveTo(xPos[3], scroller4);
+        scroller4 +=velocity;
+        sp_scrollingCar5->moveTo(xPos[4], scroller5);
+        scroller5 +=velocity;
+        */
     }
     else{
         TextStream::instance().clear();
@@ -196,6 +294,7 @@ void raceScene::tick(u16 keys) {
     //Timer1 T < 1s
     if(REG_TM3D != timer1 ) {
         timer1 = REG_TM3D;
+        secCounter++;
         //nog niks
     }
 
@@ -203,72 +302,67 @@ void raceScene::tick(u16 keys) {
 
 }
 
-int raceScene::createObstacle() {
+void raceScene::createObstacle(uint8_t select) {
 
-    srand(time(NULL));
-    int select = rand()%6;
-    xPos = XMIN + rand() % ((XMAX + 1)-XMIN);
-    static unsigned long int ID =0;
+    //srand(time(NULL));
+    //int select = rand()%6;
+    int xPos=0;
     SpriteBuilder<Sprite> builder;
-    ID++;
-
-    if(ID>3)
-        ID = 1;
 
     switch (select) {
         case 1:
+            xPos = XMIN + rand() % ((XMAX + 1)-XMIN);
             sp_scrollingCar = builder
                     .withData(red_carTiles, sizeof(red_carTiles))
                     .withSize(SIZE_16_16)
                     .withLocation(xPos, 240)
                             //.withinBounds()
                     .buildPtr();
-            return ID;
-            //break;
+            break;
         case 2:
-            sp_scrollingCar = builder
+            xPos = XMIN + rand() % ((XMAX + 1)-XMIN);
+            sp_scrollingCar2 = builder
                     .withData(purple_carTiles, sizeof(purple_carTiles))
                     .withSize(SIZE_16_16)
                     .withLocation(xPos, 240)
                             //.withinBounds()
                     .buildPtr();
-            return ID;
-            //break;
+            break;
         case 3:
-            sp_scrollingCar = builder
+            xPos = XMIN + rand() % ((XMAX + 1)-XMIN);
+            sp_scrollingCar3 = builder
                     .withData(turquoise_carTiles, sizeof(turquoise_carTiles))
                     .withSize(SIZE_16_16)
                     .withLocation(xPos, 240)
                             //.withinBounds()
                     .buildPtr();
-            return ID;
-            //break;
+            break;
         case 4:
-            sp_scrollingCar = builder
+            xPos = XMIN + rand() % ((XMAX + 1)-XMIN);
+            sp_scrollingCar4 = builder
                     .withData(blue_carTiles, sizeof(blue_carTiles))
                     .withSize(SIZE_16_16)
                     .withLocation(xPos, 240)
                             //.withinBounds()
                     .buildPtr();
-            return ID;
-            //break;
+            break;
         case 5:
-            sp_scrollingCar = builder
+            xPos = XMIN + rand() % ((XMAX + 1)-XMIN);
+            sp_scrollingCar5 = builder
                     .withData(green_carTiles, sizeof(green_carTiles))
                     .withSize(SIZE_16_16)
                     .withLocation(xPos, 240)
                             //.withinBounds()
                     .buildPtr();
-            return ID;
-            //break;
+            break;
         case 6:
+            xPos = XMIN + rand() % ((XMAX + 1)-XMIN);
             sp_scrollingCar = builder
                     .withData(mustard_carTiles, sizeof(mustard_carTiles))
                     .withSize(SIZE_16_16)
                     .withLocation(xPos, 240)
                             //.withinBounds()
                     .buildPtr();
-            return ID;
-            //break;
+            break;
     }
 }

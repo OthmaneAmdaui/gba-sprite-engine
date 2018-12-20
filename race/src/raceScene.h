@@ -7,6 +7,7 @@
 
 
 #include <libgba-sprite-engine/scene.h>
+#include <libgba-sprite-engine/gba_engine.h>
 
 #define LIMIT_RIGHT 29
 #define LIMIT_LEFT 46
@@ -18,6 +19,9 @@ private:
     std::unique_ptr<Sprite> sp_red_car;
     std::unique_ptr<Sprite> sp_scrollingCar;
     std::unique_ptr<Sprite> sp_scrollingCar2;
+    std::unique_ptr<Sprite> sp_scrollingCar3;
+    std::unique_ptr<Sprite> sp_scrollingCar4;
+    std::unique_ptr<Sprite> sp_scrollingCar5;
     std::unique_ptr<Sprite> sp_heart1;
     std::unique_ptr<Sprite> sp_heart2;
     std::unique_ptr<Sprite> sp_heart3;
@@ -29,11 +33,22 @@ private:
 
     int scroller = 0;
     int scroller2 = 0;
+    int scroller3 = 0;
+    int scroller4 = 0;
+    int scroller5 = 0;
     int timer0 = -1;
     int timer1 = -1;
     int score = 0;
+    int secCounter = 0;
     int life = 6;
-    int xPos = 0;
+    int xPos[5] = {XMIN + rand() % ((XMAX + 1) - XMIN),XMIN + rand() % ((XMAX + 1) - XMIN),
+                   XMIN + rand() % ((XMAX + 1) - XMIN),XMIN + rand() % ((XMAX + 1) - XMIN),
+                   XMIN + rand() % ((XMAX + 1) - XMIN)};
+    int velocity = 1;
+    bool firstLoad = true;
+    bool startMovingObstacle1 = false;
+    bool move[5] = {false, false, false, false, false};
+    bool obstaclePassed = false;
     bool isHit = false;
     bool isHit_mem = false;
     bool isDead = false;
@@ -46,7 +61,7 @@ public:
 
     void load() override;
     void tick(u16 i) override;
-    int createObstacle();
+    void createObstacle(uint8_t select);
 
 };
 
