@@ -8,13 +8,16 @@
 
 #include <libgba-sprite-engine/scene.h>
 
-#define LIMITE_RIGHT 29
-#define LIMITE_LEFT 46
+#define LIMIT_RIGHT 29
+#define LIMIT_LEFT 46
+#define XMIN 46
+#define XMAX 195
 
 class raceScene : public Scene{
 private:
     std::unique_ptr<Sprite> sp_red_car;
     std::unique_ptr<Sprite> sp_scrollingCar;
+    std::unique_ptr<Sprite> sp_scrollingCar2;
     std::unique_ptr<Sprite> sp_heart1;
     std::unique_ptr<Sprite> sp_heart2;
     std::unique_ptr<Sprite> sp_heart3;
@@ -25,10 +28,12 @@ private:
     int scrollX, scrollY;
 
     int scroller = 0;
+    int scroller2 = 0;
     int timer0 = -1;
     int timer1 = -1;
     int score = 0;
     int life = 6;
+    int xPos = 0;
     bool isHit = false;
     bool isHit_mem = false;
     bool isDead = false;
@@ -41,6 +46,7 @@ public:
 
     void load() override;
     void tick(u16 i) override;
+    int createObstacle();
 
 };
 
