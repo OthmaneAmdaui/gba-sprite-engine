@@ -14,7 +14,7 @@ void toggleTimer0(){
 }
 
 void initTimer1(){
-    REG_TM2D = -0x19A;                      // 25ms
+    REG_TM2D = -0x52;                      // 25ms
     REG_TM2CNT = TM_FREQ_1024;
     REG_TM3CNT = TM_ENABLE | TM_CASCADE;
 }

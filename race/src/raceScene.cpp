@@ -23,11 +23,12 @@
 std::vector<Sprite *> raceScene::sprites() {
     return {
             sp_red_car.get(),
-            sp_scrollingCar.get(),
+            sp_scrollingCar1.get(),
             sp_scrollingCar2.get(),
             sp_scrollingCar3.get(),
             sp_scrollingCar4.get(),
             sp_scrollingCar5.get(),
+            //sp_scrollingCar6.get(),
             sp_heart1.get(),
             sp_heart2.get(),
             sp_heart3.get(),
@@ -56,11 +57,12 @@ void raceScene::load() {
             //.withinBounds()
             .buildPtr();
     srand(time(NULL));
+    createObstacle(1);
     createObstacle(2);
     createObstacle(3);
     createObstacle(4);
     createObstacle(5);
-    createObstacle(6);
+    //createObstacle(6);
     /*sp_scrollingCar = builder
             .withData(blue_carTiles, sizeof(blue_carTiles))
             .withSize(SIZE_16_16)
@@ -106,28 +108,51 @@ void raceScene::load() {
 
 void raceScene::tick(u16 keys) {
     std::string score_str = std::to_string(score);
-    // first time
-    if(secCounter == 1) //
-    {
-        //startMovingObstacle1 = true;
-        move[0] = true;
-    }
-    if(secCounter == 2)
-    {
-        move[1] = true;
-    }
-    /*if(firstLoad){
-        // 3sec later start move the first obstacle
-        switch (secCounter){
-            case 1:
-                startMovingObstacle1 = true;
-                move1 = true;
-                secCounter = 0;
-                break;
-            // case 5:
-            // firstLoad =false;
+    //counter++;
+    //if(counter == 1) {
+      //  counter =0;
+        /*if (!stopStartMovingCntr) {       // count until all the obstacles are moved
+            startMovingCounter++;
         }
-    }*/
+        obstacleVelocityCntr++;*/
+    //}
+    // 3sec later start startMove the first obstacle
+    switch (startMovingCounter) {        // time between each obstacle
+        case 1:
+            startMove[0] = true;
+            break;
+        case 50:
+            startMove[1] = true;
+            break;
+        case 100:
+            startMove[2] = true;
+            break;
+        case 150:
+            startMove[3] = true;
+            break;
+        case 200:
+            startMove[4] = true;
+            // after last resset startMovingCounter and stop the counting
+            startMovingCounter = 0;
+            stopStartMovingCntr = true; // after last obstacle, doesn't need to count
+            break;
+        /*case 50:
+            startMove[5] = true;
+            // after last resset startMovingCounter and stop the counting
+            startMovingCounter = 0;
+            stopStartMovingCntr = true; // after last obstacle, doesn't need to count
+            break;*/
+    }
+    // unlock (move = true) so // wachttijd
+    if(obstacleVelocityCntr == waitingTime) {
+        if (startMove[0]) { Move[0] = true; }
+        if (startMove[1]) { Move[1] = true; }
+        if (startMove[2]) { Move[2] = true; }
+        if (startMove[3]) { Move[3] = true; }
+        if (startMove[4]) { Move[4] = true; }
+        //if (startMove[5]) { Move[5] = true; }
+        obstacleVelocityCntr = 0;
+    }
     //Dead?
     if(!isDead){
         //Car movement
@@ -160,8 +185,8 @@ void raceScene::tick(u16 keys) {
         //Scroller for objects
        // if(startMovingObstacle1)
         //{
-            if (scroller >= GBA_SCREEN_HEIGHT + 16) {
-                scroller = 0;
+            if (scroller[0] >= GBA_SCREEN_HEIGHT + 16) {
+                scroller[0] = 0;
                 xPos[0] = XMIN + rand() % ((XMAX + 1)-XMIN);
                 //move1 = false;
                 //obstaclePassed = true;
@@ -169,78 +194,68 @@ void raceScene::tick(u16 keys) {
                 // clear obstacle (car sprite)
                 // create Obstacle
             }
-            if (scroller2 >= GBA_SCREEN_HEIGHT + 16) {
-                scroller2 = 0;
+            if (scroller[1] >= GBA_SCREEN_HEIGHT + 16) {
+                scroller[1] = 0;
                 xPos[1] = XMIN + rand() % ((XMAX + 1) - XMIN);
             }
-            if (scroller3 >= GBA_SCREEN_HEIGHT + 16) {
-                scroller3 = 0;
+            if (scroller[2] >= GBA_SCREEN_HEIGHT + 16) {
+                scroller[2] = 0;
                 xPos[2] = XMIN + rand() % ((XMAX + 1) - XMIN);
             }
-            if(move[0])
-            {
-                sp_scrollingCar->moveTo(xPos[0], scroller);
-                scroller +=velocity;
-                //move[0] = false;
+            if (scroller[3] >= GBA_SCREEN_HEIGHT + 16) {
+                scroller[3] = 0;
+                xPos[3] = XMIN + rand() % ((XMAX + 1) - XMIN);
             }
-            if(move[1])
-            {
-                sp_scrollingCar2->moveTo(xPos[1], scroller2);
-                scroller2 +=velocity;
-                secCounter = 0;             // wait until next time
-                move[1] = false;
-                move[0] = false;
+            if (scroller[4] >= GBA_SCREEN_HEIGHT + 16) {
+                scroller[4] = 0;
+                xPos[4] = XMIN + rand() % ((XMAX + 1) - XMIN);
             }
-
-            if(move[2])
+            /*if (scroller[5] >= GBA_SCREEN_HEIGHT + 16) {
+                scroller[5] = 0;
+                xPos[5] = XMIN + rand() % ((XMAX + 1) - XMIN);
+            }*/
+            if(Move[0])
             {
-                sp_scrollingCar3->moveTo(xPos[2], scroller3);
-                scroller3 +=velocity;
-                move[2] = false;
+                sp_scrollingCar1->moveTo(xPos[0], scroller[0]);
+                scroller[0] +=velocity;
+                Move[0] = false;
             }
-//            sp_scrollingCar->moveTo(xPos[0], scroller);
-//            scroller +=velocity;
-        //}
-/*        if (scroller >= GBA_SCREEN_HEIGHT + 16) {
-            scroller = 0;
-            xPos[0] = XMIN + rand() % ((XMAX + 1)-XMIN);
-            //createObstacle();
-            // clear obstacle (car sprite)
-            // create Obstacle
-        }
-        if (scroller2 >= GBA_SCREEN_HEIGHT + 16) {
-            scroller2 = 0;
-            xPos[1] = XMIN + rand() % ((XMAX + 1) - XMIN);
-        }
-        if (scroller3 >= GBA_SCREEN_HEIGHT + 16) {
-            scroller3 = 0;
-            xPos[2] = XMIN + rand() % ((XMAX + 1) - XMIN);
-        }
-        if (scroller4 >= GBA_SCREEN_HEIGHT + 16) {
-            scroller4 = 0;
-            xPos[3] = XMIN + rand() % ((XMAX + 1) - XMIN);
-        }
-        if (scroller5 >= GBA_SCREEN_HEIGHT + 16) {
-            scroller5 = 0;
-            xPos[4] = XMIN + rand() % ((XMAX + 1) - XMIN);
-        }
-        sp_scrollingCar->moveTo(xPos[0], scroller);
-        scroller +=velocity;
-        sp_scrollingCar2->moveTo(xPos[1], scroller2);
-        scroller2 +=velocity;
-        sp_scrollingCar3->moveTo(xPos[2], scroller3);
-        scroller3 +=velocity;
-        sp_scrollingCar4->moveTo(xPos[3], scroller4);
-        scroller4 +=velocity;
-        sp_scrollingCar5->moveTo(xPos[4], scroller5);
-        scroller5 +=velocity;
-        */
+            if(Move[1])
+            {
+                sp_scrollingCar2->moveTo(xPos[1], scroller[1]);
+                scroller[1] +=velocity;
+                Move[1] = false;
+            }
+            if(Move[2])
+            {
+                sp_scrollingCar3->moveTo(xPos[2], scroller[2]);
+                scroller[2] +=velocity;
+                Move[2] = false;
+            }
+            if(Move[3])
+            {
+                sp_scrollingCar4->moveTo(xPos[3], scroller[3]);
+                scroller[3] +=velocity;
+                Move[3] = false;
+            }
+            if(Move[4])
+            {
+                sp_scrollingCar5->moveTo(xPos[4], scroller[4]);
+                scroller[4] +=velocity;
+                Move[4] = false;
+            }
+            /*if(Move[5])
+            {
+                sp_scrollingCar6->moveTo(xPos[5], scroller[5]);
+                scroller[5] +=velocity;
+                Move[5] = false;
+            }*/
     }
     else{
         TextStream::instance().clear();
         toggleTimer0();
         scrollY = 0;
-        scroller = 0;
+        scroller[0] = scroller[1] = scroller[2] = scroller[3] = scroller[4] = scroller[5] = 0;
         TextStream::instance().setText("YOU DIED",8,12);
         TextStream::instance().setText("SCORE: ",9,13);
         TextStream::instance().setText(score_str,9,19);
@@ -252,7 +267,12 @@ void raceScene::tick(u16 keys) {
 
     //Collision
     isHit_mem = isHit;
-    if(sp_red_car->collidesWith(*sp_scrollingCar)){isHit = true;}
+    if((sp_red_car->collidesWith(*sp_scrollingCar1)) || (sp_red_car->collidesWith(*sp_scrollingCar2))
+        || (sp_red_car->collidesWith(*sp_scrollingCar3)) || (sp_red_car->collidesWith(*sp_scrollingCar4))
+        || (sp_red_car->collidesWith(*sp_scrollingCar5)) || (sp_red_car->collidesWith(*sp_scrollingCar6)))
+    {
+            isHit = true;
+    }
     else{isHit = false;}
 
     if(isHit == true & isHit_mem != true){
@@ -291,10 +311,13 @@ void raceScene::tick(u16 keys) {
     }
 
 
-    //Timer1 T < 1s
+    //Timer1 T < 25ms
     if(REG_TM3D != timer1 ) {
         timer1 = REG_TM3D;
-        secCounter++;
+        if(!stopStartMovingCntr){       // count until all the obstacles are moved
+            startMovingCounter++;
+        }
+        obstacleVelocityCntr++;
         //nog niks
     }
 
@@ -312,7 +335,7 @@ void raceScene::createObstacle(uint8_t select) {
     switch (select) {
         case 1:
             xPos = XMIN + rand() % ((XMAX + 1)-XMIN);
-            sp_scrollingCar = builder
+            sp_scrollingCar1 = builder
                     .withData(red_carTiles, sizeof(red_carTiles))
                     .withSize(SIZE_16_16)
                     .withLocation(xPos, 240)
@@ -357,7 +380,7 @@ void raceScene::createObstacle(uint8_t select) {
             break;
         case 6:
             xPos = XMIN + rand() % ((XMAX + 1)-XMIN);
-            sp_scrollingCar = builder
+            sp_scrollingCar6 = builder
                     .withData(mustard_carTiles, sizeof(mustard_carTiles))
                     .withSize(SIZE_16_16)
                     .withLocation(xPos, 240)
