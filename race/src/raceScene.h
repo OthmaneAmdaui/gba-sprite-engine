@@ -39,6 +39,7 @@ private:
     int life = 6;
     int velocity = 2;
     int waitingTime = 1;
+    int levelCntr = 1;
     int xPos[6] = {XMIN + rand() % ((XMAX + 1) - XMIN),XMIN + rand() % ((XMAX + 1) - XMIN),
                    XMIN + rand() % ((XMAX + 1) - XMIN),XMIN + rand() % ((XMAX + 1) - XMIN),
                    XMIN + rand() % ((XMAX + 1) - XMIN), XMIN + rand() % ((XMAX + 1) - XMIN)};
