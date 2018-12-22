@@ -13,11 +13,11 @@
 #include <string>
 #include <time.h>
 #include "startScene.h"
+#include "chooseCarScene.h"
 #include "raceScene.h"
 #include "track1.h"
 #include "timer.h"
 #include "sprite_data.h"
-#include "mustardCar.h"
 
 
 std::vector<Sprite *> raceScene::sprites() {
@@ -100,8 +100,8 @@ void raceScene::load() {
     bg_track1.get()->useMapScreenBlock(16);
 
     initTimer0();
-    toggleTimer0();
     initTimer1();
+    toggleTimer0();
     toggleTimer1();
 
 }
@@ -250,6 +250,7 @@ void raceScene::tick(u16 keys) {
     else{
         TextStream::instance().clear();
         toggleTimer0();
+        toggleTimer1();
         scrollY = 0;
         scroller[0] = scroller[1] = scroller[2] = scroller[3] = scroller[4] = scroller[5] = 0;
         TextStream::instance().setText("YOU DIED",8,12);
@@ -315,7 +316,6 @@ void raceScene::tick(u16 keys) {
             startMovingCounter++;
         }
         obstacleVelocityCntr++;
-        //nog niks
     }
 
     // generate obstacle

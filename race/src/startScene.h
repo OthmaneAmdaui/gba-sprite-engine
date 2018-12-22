@@ -18,6 +18,8 @@ private:
     bool up_mem = false;
     bool down_pressed = false;
     bool down_mem = false;
+    bool start_pressed = false;
+    bool start_mem = false;
 public:
     std::vector<Sprite *> sprites() override;
     std::vector<Background *> backgrounds() override;

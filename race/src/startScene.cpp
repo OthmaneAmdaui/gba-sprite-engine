@@ -41,17 +41,20 @@ void startScene::tick(u16 keys) {
     //Positive flank detection
     up_mem = up_pressed;
     down_mem = down_pressed;
+    start_mem = start_pressed;
     if(keys & KEY_UP){up_pressed = true;}
     else{up_pressed = false;}
     if(keys & KEY_DOWN){down_pressed = true;}
     else{down_pressed = false;}
+    if(keys & KEY_START){start_pressed = true;}
+    else{start_pressed  = false;}
 
     switch (sp_arrow->getY()){
         case Y_TOP:
             if((up_pressed == true & up_mem != true) | (down_pressed == true & down_mem != true)){
                 sp_arrow->moveTo(64, Y_BOTTOM);
             }
-            else if(keys & KEY_START) {
+            else if(start_pressed == true & start_mem != true) {
                 //if (!engine->isTransitioning()) {
                     TextStream::instance().setText("Prepare for the race!!!",0,0);
                     engine->transitionIntoScene(new raceScene(engine), new FadeOutScene(2));
@@ -62,7 +65,7 @@ void startScene::tick(u16 keys) {
             if((up_pressed == true & up_mem != true) | (down_pressed == true & down_mem != true)){
                 sp_arrow->moveTo(64, Y_TOP);
             }
-            else if(keys & KEY_START) {
+            else if(start_pressed == true & start_mem != true) {
                 engine->transitionIntoScene(new chooseCarScene(engine), new FadeOutScene(10));
             }
             break;

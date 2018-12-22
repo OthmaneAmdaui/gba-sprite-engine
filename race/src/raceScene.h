@@ -36,7 +36,7 @@ private:
     int timer0 = -1;
     int timer1 = -1;
     int score = 0;
-    int life = 6;
+    int life = 5;
     int velocity = 2;
     int waitingTime = 1;
     int levelCntr = 1;
