@@ -43,7 +43,6 @@ private:
     bool start_mem = false;
     //1:red (default), 2:blue, 3:green, 4:purple, 5:turquoise, 6:mustard
     int chosen_car = 1;
-    int *car;
 
 public:
     std::vector<Sprite *> sprites() override;
@@ -53,7 +52,7 @@ public:
 
     void load() override;
     void tick(u16 keys) override;
-    int *getChosenCar(){return &chosen_car;};
+    int getChosenCar(){return chosen_car;}
 
 };
 #endif //GBA_SPRITE_ENGINE_PROJECT_CHOOSECARSCENE_H

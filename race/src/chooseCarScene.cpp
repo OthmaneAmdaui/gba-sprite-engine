@@ -9,8 +9,8 @@
 #include <libgba-sprite-engine/effects/fade_out_scene.h>
 #include <vector>
 #include "startScene.h"
-#include "raceScene.h"
 #include "chooseCarScene.h"
+#include "raceScene.h"
 #include "sprite_data.h"
 
 

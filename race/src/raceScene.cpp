@@ -1,7 +1,6 @@
 //
 // Created by Othmane Amdaui on 01-Dec-18.
 //
-
 #include <libgba-sprite-engine/sprites/affine_sprite.h>
 #include <libgba-sprite-engine/sprites/sprite_builder.h>
 #include <libgba-sprite-engine/effects/fade_out_scene.h>
@@ -18,7 +17,6 @@
 #include "track1.h"
 #include "timer.h"
 #include "sprite_data.h"
-
 
 std::vector<Sprite *> raceScene::sprites() {
     return {
@@ -54,8 +52,59 @@ void raceScene::load() {
             .withData(red_carTiles, sizeof(red_carTiles))
             .withSize(SIZE_16_16)
             .withLocation(GBA_SCREEN_WIDTH/4, GBA_SCREEN_HEIGHT/2)
-            //.withinBounds()
+                    //.withinBounds()
             .buildPtr();
+/*
+    if(chooseCarScene1->getChosenCar() == 1){
+        sp_red_car = builder
+                .withData(red_carTiles, sizeof(red_carTiles))
+                .withSize(SIZE_16_16)
+                .withLocation(GBA_SCREEN_WIDTH/4, GBA_SCREEN_HEIGHT/2)
+                        //.withinBounds()
+                .buildPtr();
+    }
+    else if(chooseCarScene1->getChosenCar() == 2){
+        sp_red_car = builder
+                .withData(blue_carTiles, sizeof(blue_carTiles))
+                .withSize(SIZE_16_16)
+                .withLocation(GBA_SCREEN_WIDTH/4, GBA_SCREEN_HEIGHT/2)
+                        //.withinBounds()
+                .buildPtr();
+    }
+    else if(chooseCarScene1->getChosenCar() == 3){
+        sp_red_car = builder
+                .withData(green_carTiles, sizeof(green_carTiles))
+                .withSize(SIZE_16_16)
+                .withLocation(GBA_SCREEN_WIDTH/4, GBA_SCREEN_HEIGHT/2)
+                        //.withinBounds()
+                .buildPtr();
+    }
+    else if(chooseCarScene1->getChosenCar() == 4){
+        sp_red_car = builder
+                .withData(purple_carTiles, sizeof(purple_carTiles))
+                .withSize(SIZE_16_16)
+                .withLocation(GBA_SCREEN_WIDTH/4, GBA_SCREEN_HEIGHT/2)
+                        //.withinBounds()
+                .buildPtr();
+    }
+    else if(chooseCarScene1->getChosenCar() == 5){
+        sp_red_car = builder
+                .withData(turquoise_carTiles, sizeof(turquoise_carTiles))
+                .withSize(SIZE_16_16)
+                .withLocation(GBA_SCREEN_WIDTH/4, GBA_SCREEN_HEIGHT/2)
+                        //.withinBounds()
+                .buildPtr();
+    }
+    else if(chooseCarScene1->getChosenCar() == 6){
+        sp_red_car = builder
+                .withData(mustard_carTiles, sizeof(mustard_carTiles))
+                .withSize(SIZE_16_16)
+                .withLocation(GBA_SCREEN_WIDTH/4, GBA_SCREEN_HEIGHT/2)
+                        //.withinBounds()
+                .buildPtr();
+    }*/
+
+
     srand(time(NULL));
     createObstacle(1);
     createObstacle(2);
@@ -101,9 +150,8 @@ void raceScene::load() {
 
     initTimer0();
     initTimer1();
-    toggleTimer0();
-    toggleTimer1();
-
+    startTimer0();
+    startTimer1();
 }
 
 void raceScene::tick(u16 keys) {
@@ -246,13 +294,33 @@ void raceScene::tick(u16 keys) {
             scroller[5] +=velocity;
             Move[5] = false;
         }*/
+
+        //Timer0; T = 1s
+        if(REG_TM1D != timer0){
+            timer0 = REG_TM1D;
+            TextStream::instance().clear();
+            score++;
+            levelCntr++;
+            TextStream::instance().setText(score_str, 0, 1);
+        }
+
+        //Timer1 T < 25ms
+        if(REG_TM3D != timer1 ) {
+            timer1 = REG_TM3D;
+            if(!stopStartMovingCntr){       // count until all the obstacles are moved
+                startMovingCounter++;
+            }
+            obstacleVelocityCntr++;
+        }
     }
     else{
         TextStream::instance().clear();
-        toggleTimer0();
-        toggleTimer1();
+        stopTimer0();
+        stopTimer1();
         scrollY = 0;
-        scroller[0] = scroller[1] = scroller[2] = scroller[3] = scroller[4] = scroller[5] = 0;
+        for (int i = 0; i < 6; i++){
+            scroller[i] = 0;
+        }
         TextStream::instance().setText("YOU DIED",8,12);
         TextStream::instance().setText("SCORE: ",9,13);
         TextStream::instance().setText(score_str,9,19);
@@ -297,25 +365,6 @@ void raceScene::tick(u16 keys) {
             }
         }
         else{isDead = true;}
-    }
-
-    //Timer0; T = 1s
-    if(REG_TM1D != timer0){
-        timer0 = REG_TM1D;
-        TextStream::instance().clear();
-        score++;
-        levelCntr++;
-        TextStream::instance().setText(score_str, 0, 1);
-    }
-
-
-    //Timer1 T < 25ms
-    if(REG_TM3D != timer1 ) {
-        timer1 = REG_TM3D;
-        if(!stopStartMovingCntr){       // count until all the obstacles are moved
-            startMovingCounter++;
-        }
-        obstacleVelocityCntr++;
     }
 
     // generate obstacle

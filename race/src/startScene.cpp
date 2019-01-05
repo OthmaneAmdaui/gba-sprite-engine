@@ -8,8 +8,8 @@
 #include <libgba-sprite-engine/gba_engine.h>
 #include <libgba-sprite-engine/effects/fade_out_scene.h>
 #include "startScene.h"
-#include "raceScene.h"
 #include "chooseCarScene.h"
+#include "raceScene.h"
 #include "sprite_data.h"
 
 std::vector<Background *> startScene::backgrounds() {

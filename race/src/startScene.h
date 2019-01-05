@@ -6,6 +6,7 @@
 #define GBA_SPRITE_ENGINE_PROJECT_STARTSCENE_H
 
 #include <libgba-sprite-engine/scene.h>
+#include <libgba-sprite-engine/gba_engine.h>
 
 #define Y_TOP 36
 #define Y_BOTTOM 76
@@ -20,7 +21,9 @@ private:
     bool down_mem = false;
     bool start_pressed = false;
     bool start_mem = false;
+
 public:
+
     std::vector<Sprite *> sprites() override;
     std::vector<Background *> backgrounds() override;
 
