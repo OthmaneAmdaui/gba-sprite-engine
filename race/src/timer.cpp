@@ -6,7 +6,7 @@
 #include "timer.h"
 
 void initTimer0(){
-    setTimer0Value(0x4000); // 0x4000 (1s) ticks till overflow
+    REG_TM0D = -0x4000; // 0x4000 (1s) ticks till overflow
     REG_TM0CNT = TM_FREQ_1024;  // we're using the 1024 cycle timer
     REG_TM1CNT = TM_ENABLE | TM_CASCADE; // cascade into tm1
 }
@@ -25,7 +25,7 @@ void setTimer0Value(int value){
 
 
 void initTimer1(){
-    setTimer1Value(0x52);   // 25ms
+    REG_TM2D = -0x52; // 25ms
     REG_TM2CNT = TM_FREQ_1024;
     REG_TM3CNT = TM_ENABLE | TM_CASCADE;
 }

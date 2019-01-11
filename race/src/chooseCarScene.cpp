@@ -12,6 +12,7 @@
 #include "chooseCarScene.h"
 #include "raceScene.h"
 #include "sprite_data.h"
+#include "soundFx_menuNavigation_data.h"
 
 
 
@@ -94,41 +95,89 @@ void chooseCarScene::tick(u16 keys) {
     else{start_pressed  = false;}
 
     if(sp_arrow->getX() == red_car_x & sp_arrow->getY() == red_car_y){
-        if(right_pressed == true & right_mem != true){sp_arrow->moveTo(blue_car_x, blue_car_y);}
-        else if(left_pressed == true & left_mem != true){sp_arrow->moveTo(mustard_car_x, mustard_car_y);}
-        else if (up_pressed == true & up_mem != true){sp_arrow->moveTo(purple_car_x, purple_car_y);}
-        else if (down_pressed == true & down_mem != true){sp_arrow->moveTo(purple_car_x, purple_car_y);}
+        if(right_pressed == true & right_mem != true){
+            sp_arrow->moveTo(blue_car_x, blue_car_y);
+            //engine.get()->enqueueSound(menu_nav, menu_nav_bytes, 32000);
+        }
+        else if(left_pressed == true & left_mem != true){
+            sp_arrow->moveTo(mustard_car_x, mustard_car_y);
+            //engine.get()->enqueueSound(menu_nav, menu_nav_bytes, 32000);
+        }
+        else if (up_pressed == true & up_mem != true){
+            sp_arrow->moveTo(purple_car_x, purple_car_y);
+            //engine.get()->enqueueSound(menu_nav, menu_nav_bytes, 32000);
+        }
+        else if (down_pressed == true & down_mem != true){
+            sp_arrow->moveTo(purple_car_x, purple_car_y);
+            //engine.get()->enqueueSound(menu_nav, menu_nav_bytes, 32000);
+        }
         else if(start_pressed == true & start_mem != true){
             chosen_car = 1;
             engine->transitionIntoScene(new startScene(engine), new FadeOutScene(10));
         }
     }
     else if(sp_arrow->getX() == blue_car_x & sp_arrow->getY() == blue_car_y){
-        if(right_pressed == true & right_mem != true){sp_arrow->moveTo(green_car_x, green_car_y);}
-        else if(left_pressed == true & left_mem != true){sp_arrow->moveTo(red_car_x, red_car_y);}
-        else if (up_pressed == true & up_mem != true){sp_arrow->moveTo(turquoise_car_x, turquoise_car_y);}
-        else if (down_pressed == true & down_mem != true){sp_arrow->moveTo(turquoise_car_x, turquoise_car_y);}
+        if(right_pressed == true & right_mem != true){
+            sp_arrow->moveTo(green_car_x, green_car_y);
+            //engine.get()->enqueueSound(menu_nav, menu_nav_bytes, 32000);
+        }
+        else if(left_pressed == true & left_mem != true){
+            sp_arrow->moveTo(red_car_x, red_car_y);
+            //engine.get()->enqueueSound(menu_nav, menu_nav_bytes, 32000);
+        }
+        else if (up_pressed == true & up_mem != true){
+            sp_arrow->moveTo(turquoise_car_x, turquoise_car_y);
+            //engine.get()->enqueueSound(menu_nav, menu_nav_bytes, 32000);
+        }
+        else if (down_pressed == true & down_mem != true){
+            sp_arrow->moveTo(turquoise_car_x, turquoise_car_y);
+            //engine.get()->enqueueSound(menu_nav, menu_nav_bytes, 32000);
+        }
         else if(start_pressed == true & start_mem != true){
             chosen_car = 2;
              engine->transitionIntoScene(new startScene(engine), new FadeOutScene(10));
         }
     }
     else if(sp_arrow->getX() == green_car_x & sp_arrow->getY() == green_car_y){
-        if(right_pressed == true & right_mem != true){sp_arrow->moveTo(purple_car_x, purple_car_y);}
-        else if(left_pressed == true & left_mem != true){sp_arrow->moveTo(blue_car_x, blue_car_y);}
-        else if (up_pressed == true & up_mem != true){sp_arrow->moveTo(mustard_car_x, mustard_car_y);}
-        else if (down_pressed == true & down_mem != true){sp_arrow->moveTo(mustard_car_x, mustard_car_y);}
+        if(right_pressed == true & right_mem != true){
+            sp_arrow->moveTo(purple_car_x, purple_car_y);
+            //engine.get()->enqueueSound(menu_nav, menu_nav_bytes, 32000);
+        }
+        else if(left_pressed == true & left_mem != true){
+            sp_arrow->moveTo(blue_car_x, blue_car_y);
+            //engine.get()->enqueueSound(menu_nav, menu_nav_bytes, 32000);
+        }
+        else if (up_pressed == true & up_mem != true){
+            sp_arrow->moveTo(mustard_car_x, mustard_car_y);
+            //engine.get()->enqueueSound(menu_nav, menu_nav_bytes, 32000);
+        }
+        else if (down_pressed == true & down_mem != true){
+            sp_arrow->moveTo(mustard_car_x, mustard_car_y);
+            //engine.get()->enqueueSound(menu_nav, menu_nav_bytes, 32000);
+        }
         else if(start_pressed == true & start_mem != true){
             chosen_car = 3;
-            engine->transitionIntoScene(new startScene(engine), new FadeOutScene(10));
+            //engine->transitionIntoScene(new startScene(engine), new FadeOutScene(10));
         }
 
     }
     else if(sp_arrow->getX() == purple_car_x & sp_arrow->getY() == purple_car_y){
-        if(right_pressed == true & right_mem != true){sp_arrow->moveTo(turquoise_car_x, turquoise_car_y);}
-        else if(left_pressed == true & left_mem != true){sp_arrow->moveTo(green_car_x, green_car_y);}
-        else if (up_pressed == true & up_mem != true){sp_arrow->moveTo(red_car_x, red_car_y);}
-        else if (down_pressed == true & down_mem != true){sp_arrow->moveTo(red_car_x, red_car_y);}
+        if(right_pressed == true & right_mem != true){
+            sp_arrow->moveTo(turquoise_car_x, turquoise_car_y);
+            //engine.get()->enqueueSound(menu_nav, menu_nav_bytes, 32000);
+        }
+        else if(left_pressed == true & left_mem != true){
+            sp_arrow->moveTo(green_car_x, green_car_y);
+            //engine.get()->enqueueSound(menu_nav, menu_nav_bytes, 32000);
+        }
+        else if (up_pressed == true & up_mem != true){
+            sp_arrow->moveTo(red_car_x, red_car_y);
+            //engine.get()->enqueueSound(menu_nav, menu_nav_bytes, 32000);
+        }
+        else if (down_pressed == true & down_mem != true){
+            sp_arrow->moveTo(red_car_x, red_car_y);
+            //engine.get()->enqueueSound(menu_nav, menu_nav_bytes, 32000);
+        }
         else if(start_pressed == true & start_mem != true){
             chosen_car = 4;
             engine->transitionIntoScene(new startScene(engine), new FadeOutScene(10));
@@ -136,20 +185,44 @@ void chooseCarScene::tick(u16 keys) {
 
     }
     else if(sp_arrow->getX() == turquoise_car_x & sp_arrow->getY() == turquoise_car_y){
-        if(right_pressed == true & right_mem != true){sp_arrow->moveTo(mustard_car_x, mustard_car_y);}
-        else if(left_pressed == true & left_mem != true){sp_arrow->moveTo(purple_car_x, purple_car_y);}
-        else if (up_pressed == true & up_mem != true){sp_arrow->moveTo(blue_car_x, blue_car_y);}
-        else if (down_pressed == true & down_mem != true){sp_arrow->moveTo(blue_car_x, blue_car_y);}
+        if(right_pressed == true & right_mem != true){
+            sp_arrow->moveTo(mustard_car_x, mustard_car_y);
+            //engine.get()->enqueueSound(menu_nav, menu_nav_bytes, 32000);
+        }
+        else if(left_pressed == true & left_mem != true){
+            sp_arrow->moveTo(purple_car_x, purple_car_y);
+            //engine.get()->enqueueSound(menu_nav, menu_nav_bytes, 32000);
+        }
+        else if (up_pressed == true & up_mem != true){
+            sp_arrow->moveTo(blue_car_x, blue_car_y);
+            //engine.get()->enqueueSound(menu_nav, menu_nav_bytes, 32000);
+        }
+        else if (down_pressed == true & down_mem != true){
+            sp_arrow->moveTo(blue_car_x, blue_car_y);
+            //engine.get()->enqueueSound(menu_nav, menu_nav_bytes, 32000);
+        }
         else if(start_pressed == true & start_mem != true){
             chosen_car = 5;
-            engine->transitionIntoScene(new startScene(engine), new FadeOutScene(10));
+            //engine->transitionIntoScene(new startScene(engine), new FadeOutScene(10));
         }
     }
     else if(sp_arrow->getX() == mustard_car_x & sp_arrow->getY() == mustard_car_y){
-        if(right_pressed == true & right_mem != true){sp_arrow->moveTo(red_car_x, red_car_y);}
-        else if(left_pressed == true & left_mem != true){sp_arrow->moveTo(turquoise_car_x, turquoise_car_y);}
-        else if (up_pressed == true & up_mem != true){sp_arrow->moveTo(green_car_x, green_car_y);}
-        else if (down_pressed == true & down_mem != true){sp_arrow->moveTo(green_car_x, green_car_y);}
+        if(right_pressed == true & right_mem != true){
+            sp_arrow->moveTo(red_car_x, red_car_y);
+            //engine.get()->enqueueSound(menu_nav, menu_nav_bytes, 32000);
+        }
+        else if(left_pressed == true & left_mem != true){
+            sp_arrow->moveTo(turquoise_car_x, turquoise_car_y);
+            //engine.get()->enqueueSound(menu_nav, menu_nav_bytes, 32000);
+        }
+        else if (up_pressed == true & up_mem != true){
+            sp_arrow->moveTo(green_car_x, green_car_y);
+            //engine.get()->enqueueSound(menu_nav, menu_nav_bytes, 32000);
+        }
+        else if (down_pressed == true & down_mem != true){
+            sp_arrow->moveTo(green_car_x, green_car_y);
+            //engine.get()->enqueueSound(menu_nav, menu_nav_bytes, 32000);
+        }
         else if(start_pressed == true & start_mem != true){
             chosen_car = 6;
             engine->transitionIntoScene(new startScene(engine), new FadeOutScene(10));

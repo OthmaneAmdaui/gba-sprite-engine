@@ -17,6 +17,7 @@
 #include "track1.h"
 #include "timer.h"
 #include "sprite_data.h"
+#include "soundFx_hit_data.h"
 
 std::vector<Sprite *> raceScene::sprites() {
     return {
@@ -336,7 +337,8 @@ void raceScene::tick(u16 keys) {
         || (sp_red_car->collidesWith(*sp_scrollingCar3)) || (sp_red_car->collidesWith(*sp_scrollingCar4))
         || (sp_red_car->collidesWith(*sp_scrollingCar5)) || (sp_red_car->collidesWith(*sp_scrollingCar6)))
     {
-            isHit = true;
+        isHit = true;
+        engine.get()->enqueueSound(hit, hit_bytes, 32000);
     }
     else{isHit = false;}
 

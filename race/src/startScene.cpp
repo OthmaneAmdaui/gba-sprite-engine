@@ -11,6 +11,7 @@
 #include "chooseCarScene.h"
 #include "raceScene.h"
 #include "sprite_data.h"
+#include "soundFx_menuNavigation_data.h"
 
 std::vector<Background *> startScene::backgrounds() {
     return {};
@@ -36,6 +37,7 @@ void startScene::load() {
     TextStream::instance().setText("START GAME", 5, 10);
     TextStream::instance().setText("CHOOSE CAR", 10, 10);
 
+    //engine->enqueueMusic(bgm_menu, bgm_menu_bytes);
 }
 void startScene::tick(u16 keys) {
     //Positive flank detection
@@ -52,6 +54,7 @@ void startScene::tick(u16 keys) {
     switch (sp_arrow->getY()){
         case Y_TOP:
             if((up_pressed == true & up_mem != true) | (down_pressed == true & down_mem != true)){
+                engine.get()->enqueueSound(menu_nav, menu_nav_bytes, 32000);
                 sp_arrow->moveTo(64, Y_BOTTOM);
             }
             else if(start_pressed == true & start_mem != true) {
@@ -63,9 +66,11 @@ void startScene::tick(u16 keys) {
             break;
         case Y_BOTTOM:
             if((up_pressed == true & up_mem != true) | (down_pressed == true & down_mem != true)){
+                engine.get()->enqueueSound(menu_nav, menu_nav_bytes, 32000);
                 sp_arrow->moveTo(64, Y_TOP);
             }
             else if(start_pressed == true & start_mem != true) {
+                engine.get()->enqueueSound(menu_nav, menu_nav_bytes, 32000);
                 engine->transitionIntoScene(new chooseCarScene(engine), new FadeOutScene(10));
             }
             break;
