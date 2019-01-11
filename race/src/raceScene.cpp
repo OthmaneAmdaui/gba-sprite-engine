@@ -338,7 +338,7 @@ void raceScene::tick(u16 keys) {
         || (sp_red_car->collidesWith(*sp_scrollingCar5)) || (sp_red_car->collidesWith(*sp_scrollingCar6)))
     {
         isHit = true;
-        engine.get()->enqueueSound(hit, hit_bytes, 32000);
+        //engine.get()->enqueueSound(hit, hit_bytes, 32000);
     }
     else{isHit = false;}
 
