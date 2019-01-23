@@ -5,7 +5,6 @@
 #ifndef GBA_SPRITE_ENGINE_PROJECT_RACESCENE_H
 #define GBA_SPRITE_ENGINE_PROJECT_RACESCENE_H
 
-
 #include <libgba-sprite-engine/scene.h>
 #include <libgba-sprite-engine/gba_engine.h>
 
@@ -14,7 +13,7 @@
 #define XMIN 46
 #define XMAX 195
 
-class raceScene : public Scene{
+class RaceScene : public Scene{
 private:
     std::unique_ptr<Sprite> sp_red_car;
     std::unique_ptr<Sprite> sp_scrollingCar1;
@@ -32,7 +31,7 @@ private:
 
     int scrollX, scrollY;
 
-    int scroller[5] = {0,0,0,0,0};
+    int scrollObj[5] = {0,0,0,0,0};
     int timer0 = -1;
     int timer1 = -1;
     int score = 0;
@@ -53,7 +52,7 @@ private:
     bool isDead = false;
 
 public:
-    raceScene(std::shared_ptr<GBAEngine> engine) : Scene(engine), scrollX(0), scrollY(0) {}
+    RaceScene(std::shared_ptr<GBAEngine> engine) : Scene(engine), scrollX(0), scrollY(0){}
 
     std::vector<Sprite *> sprites() override;
     std::vector<Background *> backgrounds() override;

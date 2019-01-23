@@ -6,6 +6,7 @@
 #define GBA_SPRITE_ENGINE_PROJECT_CHOOSECARSCENE_H
 
 #include <libgba-sprite-engine/scene.h>
+#include <libgba-sprite-engine/gba_engine.h>
 
 #define red_car_x 36
 #define red_car_y 60
@@ -20,8 +21,7 @@
 #define mustard_car_x 156
 #define mustard_car_y 100
 
-
-class chooseCarScene : public Scene {
+class ChooseCarScene : public Scene {
 private:
     std::unique_ptr<Sprite> sp_arrow;
     std::unique_ptr<Sprite> sp_red_car;
@@ -48,7 +48,7 @@ public:
     std::vector<Sprite *> sprites() override;
     std::vector<Background *> backgrounds() override;
 
-    chooseCarScene(std::shared_ptr<GBAEngine> engine) : Scene(engine) {}
+    ChooseCarScene(std::shared_ptr<GBAEngine> engine) : Scene(engine){}
 
     void load() override;
     void tick(u16 keys) override;

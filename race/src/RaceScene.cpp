@@ -11,15 +11,15 @@
 #include <sstream>
 #include <string>
 #include <time.h>
-#include "startScene.h"
-#include "chooseCarScene.h"
-#include "raceScene.h"
+#include "StartScene.h"
+#include "ChooseCarScene.h"
+#include "RaceScene.h"
 #include "track1.h"
 #include "timer.h"
 #include "sprite_data.h"
-#include "soundFx_hit_data.h"
+#include "soundFx_hit.h"
 
-std::vector<Sprite *> raceScene::sprites() {
+std::vector<Sprite *> RaceScene::sprites() {
     return {
             sp_red_car.get(),
             sp_scrollingCar1.get(),
@@ -36,14 +36,14 @@ std::vector<Sprite *> raceScene::sprites() {
     };
 }
 
-std::vector<Background *> raceScene::backgrounds() {
+std::vector<Background *> RaceScene::backgrounds() {
 
     return {
             bg_track1.get()
     };
 }
 
-void raceScene::load() {
+void RaceScene::load() {
     foregroundPalette = std::unique_ptr<ForegroundPaletteManager>(new ForegroundPaletteManager(sharedPal,sizeof(sharedPal)));
     backgroundPalette = std::unique_ptr<BackgroundPaletteManager>(new BackgroundPaletteManager(track_pal, sizeof(track_pal)));
 
@@ -55,8 +55,9 @@ void raceScene::load() {
             .withLocation(GBA_SCREEN_WIDTH/4, GBA_SCREEN_HEIGHT/2)
                     //.withinBounds()
             .buildPtr();
-/*
-    if(chooseCarScene1->getChosenCar() == 1){
+
+    /*
+    if(game1.getChooseCarScene()->getChosenCar() == 1){
         sp_red_car = builder
                 .withData(red_carTiles, sizeof(red_carTiles))
                 .withSize(SIZE_16_16)
@@ -64,7 +65,7 @@ void raceScene::load() {
                         //.withinBounds()
                 .buildPtr();
     }
-    else if(chooseCarScene1->getChosenCar() == 2){
+    else if(game1.getChooseCarScene()->getChosenCar() == 2){
         sp_red_car = builder
                 .withData(blue_carTiles, sizeof(blue_carTiles))
                 .withSize(SIZE_16_16)
@@ -72,7 +73,7 @@ void raceScene::load() {
                         //.withinBounds()
                 .buildPtr();
     }
-    else if(chooseCarScene1->getChosenCar() == 3){
+    else if(game1.getChooseCarScene()->getChosenCar() == 3){
         sp_red_car = builder
                 .withData(green_carTiles, sizeof(green_carTiles))
                 .withSize(SIZE_16_16)
@@ -80,7 +81,7 @@ void raceScene::load() {
                         //.withinBounds()
                 .buildPtr();
     }
-    else if(chooseCarScene1->getChosenCar() == 4){
+    else if(game1.getChooseCarScene()->getChosenCar() == 4){
         sp_red_car = builder
                 .withData(purple_carTiles, sizeof(purple_carTiles))
                 .withSize(SIZE_16_16)
@@ -88,7 +89,7 @@ void raceScene::load() {
                         //.withinBounds()
                 .buildPtr();
     }
-    else if(chooseCarScene1->getChosenCar() == 5){
+    else if(game1.getChooseCarScene()->getChosenCar() == 5){
         sp_red_car = builder
                 .withData(turquoise_carTiles, sizeof(turquoise_carTiles))
                 .withSize(SIZE_16_16)
@@ -96,15 +97,15 @@ void raceScene::load() {
                         //.withinBounds()
                 .buildPtr();
     }
-    else if(chooseCarScene1->getChosenCar() == 6){
+    else if(game1.getChooseCarScene()->getChosenCar() == 6){
         sp_red_car = builder
                 .withData(mustard_carTiles, sizeof(mustard_carTiles))
                 .withSize(SIZE_16_16)
                 .withLocation(GBA_SCREEN_WIDTH/4, GBA_SCREEN_HEIGHT/2)
                         //.withinBounds()
                 .buildPtr();
-    }*/
-
+    }
+    */
 
     srand(time(NULL));
     createObstacle(1);
@@ -155,7 +156,7 @@ void raceScene::load() {
     startTimer1();
 }
 
-void raceScene::tick(u16 keys) {
+void RaceScene::tick(u16 keys) {
     std::string score_str = std::to_string(score);
     /*if( (levelCntr % 3) == 0)
     {
@@ -230,8 +231,8 @@ void raceScene::tick(u16 keys) {
         bg_track1.get()->scroll(scrollX, scrollY);
 
         //Scroller for objects
-        if (scroller[0] >= GBA_SCREEN_HEIGHT + 16) {
-            scroller[0] = 0;
+        if (scrollObj[0] >= GBA_SCREEN_HEIGHT + 16) {
+            scrollObj[0] = 0;
             xPos[0] = XMIN + rand() % ((XMAX + 1)-XMIN);
             //move1 = false;
             //obstaclePassed = true;
@@ -239,60 +240,60 @@ void raceScene::tick(u16 keys) {
             // clear obstacle (car sprite)
             // create Obstacle
         }
-        if (scroller[1] >= GBA_SCREEN_HEIGHT + 16) {
-            scroller[1] = 0;
+        if (scrollObj[1] >= GBA_SCREEN_HEIGHT + 16) {
+            scrollObj[1] = 0;
             xPos[1] = XMIN + rand() % ((XMAX + 1) - XMIN);
         }
-        if (scroller[2] >= GBA_SCREEN_HEIGHT + 16) {
-            scroller[2] = 0;
+        if (scrollObj[2] >= GBA_SCREEN_HEIGHT + 16) {
+            scrollObj[2] = 0;
             xPos[2] = XMIN + rand() % ((XMAX + 1) - XMIN);
         }
-        if (scroller[3] >= GBA_SCREEN_HEIGHT + 16) {
-            scroller[3] = 0;
+        if (scrollObj[3] >= GBA_SCREEN_HEIGHT + 16) {
+            scrollObj[3] = 0;
             xPos[3] = XMIN + rand() % ((XMAX + 1) - XMIN);
         }
-        if (scroller[4] >= GBA_SCREEN_HEIGHT + 16) {
-            scroller[4] = 0;
+        if (scrollObj[4] >= GBA_SCREEN_HEIGHT + 16) {
+            scrollObj[4] = 0;
             xPos[4] = XMIN + rand() % ((XMAX + 1) - XMIN);
         }
-        /*if (scroller[5] >= GBA_SCREEN_HEIGHT + 16) {
-            scroller[5] = 0;
+        /*if (scrollObj[5] >= GBA_SCREEN_HEIGHT + 16) {
+            scrollObj[5] = 0;
             xPos[5] = XMIN + rand() % ((XMAX + 1) - XMIN);
         }*/
         if(Move[0])
         {
-            sp_scrollingCar1->moveTo(xPos[0], scroller[0]);
-            scroller[0] +=velocity;
+            sp_scrollingCar1->moveTo(xPos[0], scrollObj[0]);
+            scrollObj[0] +=velocity;
             Move[0] = false;
         }
         if(Move[1])
         {
-            sp_scrollingCar2->moveTo(xPos[1], scroller[1]);
-            scroller[1] +=velocity;
+            sp_scrollingCar2->moveTo(xPos[1], scrollObj[1]);
+            scrollObj[1] +=velocity;
             Move[1] = false;
         }
         if(Move[2])
         {
-            sp_scrollingCar3->moveTo(xPos[2], scroller[2]);
-            scroller[2] +=velocity;
+            sp_scrollingCar3->moveTo(xPos[2], scrollObj[2]);
+            scrollObj[2] +=velocity;
             Move[2] = false;
         }
         if(Move[3])
         {
-            sp_scrollingCar4->moveTo(xPos[3], scroller[3]);
-            scroller[3] +=velocity;
+            sp_scrollingCar4->moveTo(xPos[3], scrollObj[3]);
+            scrollObj[3] +=velocity;
             Move[3] = false;
         }
         if(Move[4])
         {
-            sp_scrollingCar5->moveTo(xPos[4], scroller[4]);
-            scroller[4] +=velocity;
+            sp_scrollingCar5->moveTo(xPos[4], scrollObj[4]);
+            scrollObj[4] +=velocity;
             Move[4] = false;
         }
         /*if(Move[5])
         {
-            sp_scrollingCar6->moveTo(xPos[5], scroller[5]);
-            scroller[5] +=velocity;
+            sp_scrollingCar6->moveTo(xPos[5], scrollObj[5]);
+            scrollObj[5] +=velocity;
             Move[5] = false;
         }*/
 
@@ -320,14 +321,14 @@ void raceScene::tick(u16 keys) {
         stopTimer1();
         scrollY = 0;
         for (int i = 0; i < 6; i++){
-            scroller[i] = 0;
+            scrollObj[i] = 0;
         }
         TextStream::instance().setText("YOU DIED",8,12);
         TextStream::instance().setText("SCORE: ",9,13);
         TextStream::instance().setText(score_str,9,19);
 
         if(keys & KEY_START){
-            engine->transitionIntoScene(new startScene(engine), new FadeOutScene(10));
+            engine->transitionIntoScene(new StartScene(engine), new FadeOutScene(10));
         }
     }
 
@@ -338,7 +339,8 @@ void raceScene::tick(u16 keys) {
         || (sp_red_car->collidesWith(*sp_scrollingCar5)) || (sp_red_car->collidesWith(*sp_scrollingCar6)))
     {
         isHit = true;
-        //engine.get()->enqueueSound(hit, hit_bytes, 32000);
+
+        //engine.get()->enqueueSound(hit, sizeof(hit), 44100);
     }
     else{isHit = false;}
 
@@ -373,7 +375,7 @@ void raceScene::tick(u16 keys) {
 
 }
 
-void raceScene::createObstacle(uint8_t select) {
+void RaceScene::createObstacle(uint8_t select) {
 
     //srand(time(NULL));
     //int select = rand()%6;

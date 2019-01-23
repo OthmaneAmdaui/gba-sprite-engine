@@ -3,16 +3,25 @@
 //
 
 #include <libgba-sprite-engine/gba_engine.h>
-#include "startScene.h"
-#include "chooseCarScene.h"
-#include "raceScene.h"
+#include <libgba-sprite-engine/scene.h>
+
+#include "StartScene.h"
 
 int main() {
     std::shared_ptr<GBAEngine> engine(new GBAEngine());
 
-    auto *startScene1 = new startScene(engine);
+    //auto game = new Game();
 
-    engine->setScene(startScene1);
+    auto *startScene = new StartScene(engine);
+
+    //auto *chooseCarScene = new ChooseCarScene(engine);
+    //auto *raceScene = new RaceScene(engine);
+
+    //game->setStartScene(startScene);
+    //game->setChooseCarScene(chooseCarScene);
+    //game->setRaceScene(raceScene);
+
+    engine->setScene(startScene);
 
     while (true) {
         engine->update();

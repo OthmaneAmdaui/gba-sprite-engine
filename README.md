@@ -59,8 +59,8 @@ This is the layout of a main function:
 int main() {
     std::shared_ptr<GBAEngine> engine(new GBAEngine());
 
-    auto startScene = new SampleStartScene(engine);
-    engine->setScene(startScene);
+    auto StartScene = new SampleStartScene(engine);
+    engine->setScene(StartScene);
 
     while (true) {
         engine->update();

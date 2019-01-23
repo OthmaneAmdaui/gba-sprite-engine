@@ -11,7 +11,7 @@
 #define Y_TOP 36
 #define Y_BOTTOM 76
 
-class startScene : public Scene {
+class StartScene : public Scene {
 private:
     std::unique_ptr<Sprite> sp_arrow;
 
@@ -27,7 +27,7 @@ public:
     std::vector<Sprite *> sprites() override;
     std::vector<Background *> backgrounds() override;
 
-    startScene(std::shared_ptr<GBAEngine> engine) : Scene(engine) {}
+    StartScene(std::shared_ptr<GBAEngine> engine) : Scene(engine){}
 
     void load() override;
     void tick(u16 keys) override;

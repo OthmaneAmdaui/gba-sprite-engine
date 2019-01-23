@@ -7,21 +7,21 @@
 #include <libgba-sprite-engine/gba/tonc_memdef.h>
 #include <libgba-sprite-engine/gba_engine.h>
 #include <libgba-sprite-engine/effects/fade_out_scene.h>
-#include "startScene.h"
-#include "chooseCarScene.h"
-#include "raceScene.h"
+#include "StartScene.h"
+#include "ChooseCarScene.h"
+#include "RaceScene.h"
 #include "sprite_data.h"
-#include "soundFx_menuNavigation_data.h"
+#include "soundFx_menuNav.h"
 
-std::vector<Background *> startScene::backgrounds() {
+std::vector<Background *> StartScene::backgrounds() {
     return {};
 }
 
-std::vector<Sprite *> startScene::sprites() {
+std::vector<Sprite *> StartScene::sprites() {
     return {sp_arrow.get()};
 }
 
-void startScene::load() {
+void StartScene::load() {
     foregroundPalette = std::unique_ptr<ForegroundPaletteManager>(new ForegroundPaletteManager(sharedPal,sizeof(sharedPal)));
     backgroundPalette = std::unique_ptr<BackgroundPaletteManager>(new BackgroundPaletteManager());
 
@@ -39,7 +39,7 @@ void startScene::load() {
 
     //engine->enqueueMusic(bgm_menu, bgm_menu_bytes);
 }
-void startScene::tick(u16 keys) {
+void StartScene::tick(u16 keys) {
     //Positive flank detection
     up_mem = up_pressed;
     down_mem = down_pressed;
@@ -54,24 +54,23 @@ void startScene::tick(u16 keys) {
     switch (sp_arrow->getY()){
         case Y_TOP:
             if((up_pressed == true & up_mem != true) | (down_pressed == true & down_mem != true)){
-                engine.get()->enqueueSound(menu_nav, menu_nav_bytes, 32000);
+                engine.get()->enqueueSound(menuNav, sizeof(menuNav), 44100);
                 sp_arrow->moveTo(64, Y_BOTTOM);
             }
             else if(start_pressed == true & start_mem != true) {
                 //if (!engine->isTransitioning()) {
                     TextStream::instance().setText("Prepare for the race!!!",0,0);
-                    engine->transitionIntoScene(new raceScene(engine), new FadeOutScene(2));
+                    engine->transitionIntoScene(new RaceScene(engine), new FadeOutScene(2));
                 //}
             }
             break;
         case Y_BOTTOM:
             if((up_pressed == true & up_mem != true) | (down_pressed == true & down_mem != true)){
-                engine.get()->enqueueSound(menu_nav, menu_nav_bytes, 32000);
+                engine.get()->enqueueSound(menuNav, sizeof(menuNav), 44100);
                 sp_arrow->moveTo(64, Y_TOP);
             }
             else if(start_pressed == true & start_mem != true) {
-                engine.get()->enqueueSound(menu_nav, menu_nav_bytes, 32000);
-                engine->transitionIntoScene(new chooseCarScene(engine), new FadeOutScene(10));
+                engine->transitionIntoScene(new ChooseCarScene(engine), new FadeOutScene(10));
             }
             break;
     }
