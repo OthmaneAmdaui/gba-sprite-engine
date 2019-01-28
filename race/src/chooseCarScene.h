@@ -8,18 +8,20 @@
 #include <libgba-sprite-engine/scene.h>
 #include <libgba-sprite-engine/gba_engine.h>
 
-#define red_car_x 36
-#define red_car_y 60
-#define blue_car_x 96
-#define blue_car_y 60
-#define green_car_x 156
-#define green_car_y 60
-#define purple_car_x 36
-#define purple_car_y 100
-#define turquoise_car_x 96
-#define turquoise_car_y 100
-#define mustard_car_x 156
-#define mustard_car_y 100
+#define ARROW_X 36
+#define ARROW_Y 60
+#define RED_CAR_X 36
+#define RED_CAR_Y 60
+#define BLUE_CAR_X 96
+#define BLUE_CAR_Y 60
+#define GREEN_CAR_X 156
+#define GREEN_CAR_Y 60
+#define PURPLE_CAR_X 36
+#define PURPLE_CAR_Y 100
+#define TURQUOISE_CAR_X 96
+#define TURQUOISE_CAR_Y 100
+#define MUSTARD_CAR_X 156
+#define MUSTARD_CAR_Y 100
 
 class ChooseCarScene : public Scene {
 private:
@@ -52,7 +54,7 @@ public:
 
     void load() override;
     void tick(u16 keys) override;
-    int getChosenCar(){return chosen_car;}
+    void createSpriteObjects();
 
 };
 #endif //GBA_SPRITE_ENGINE_PROJECT_CHOOSECARSCENE_H

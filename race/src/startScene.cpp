@@ -31,7 +31,6 @@ void StartScene::load() {
             .withData(arrowTiles, sizeof(arrowTiles))
             .withSize(SIZE_16_16)
             .withLocation(64, 36)
-            //.withinBounds()
             .buildPtr();
 
     TextStream::instance().setText("START GAME", 5, 10);
