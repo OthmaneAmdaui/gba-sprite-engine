@@ -47,8 +47,10 @@ void RaceScene::load() {
     foregroundPalette = std::unique_ptr<ForegroundPaletteManager>(new ForegroundPaletteManager(sharedPal,sizeof(sharedPal)));
     backgroundPalette = std::unique_ptr<BackgroundPaletteManager>(new BackgroundPaletteManager(track_pal, sizeof(track_pal)));
 
-    SpriteBuilder<Sprite> builder;
+    bg_track1 = std::unique_ptr<Background>(new Background(1, track_data, sizeof(track_data), track1, sizeof(track1)));
+    bg_track1.get()->useMapScreenBlock(16);
 
+    SpriteBuilder<Sprite> builder;
     sp_red_car = builder
             .withData(red_carTiles, sizeof(red_carTiles))
             .withSize(SIZE_16_16)
@@ -65,10 +67,6 @@ void RaceScene::load() {
     //createObstacle(6);
     createHearts();
 
-
-    bg_track1 = std::unique_ptr<Background>(new Background(1, track_data, sizeof(track_data), track1, sizeof(track1)));
-    bg_track1.get()->useMapScreenBlock(16);
-
     initTimer0();
     initTimer1();
     startTimer0();
@@ -81,87 +79,31 @@ void RaceScene::tick(u16 keys) {
     checkLevel();
 
     if(checkStartMovingCounter())
-        stopStartMovingCntr = true;
+        stopStartMovingCntr = true;         // after the last one
 
-    // unlock (move = true) so // wachttijd
-    if(obstacleVelocityCntr == waitingTime) {
-        if (startMove[0]) { Move[0] = true; }
-        if (startMove[1]) { Move[1] = true; }
-        if (startMove[2]) { Move[2] = true; }
-        if (startMove[3]) { Move[3] = true; }
-        if (startMove[4]) { Move[4] = true; }
-        //if (startMove[5]) { Move[5] = true; }
-        obstacleVelocityCntr = 0;
-    }
+    enableScrollObstacles();
+
     //Dead?
     if(!isDead){
         //Car movement
-        if(keys & KEY_LEFT) {
-            sp_red_car->setVelocity(-2 ,0);
-            if(sp_red_car->getX() <= LIMIT_LEFT)
-                sp_red_car->moveTo(LIMIT_LEFT,sp_red_car->getY());
-        } else if(keys & KEY_RIGHT) {
-            sp_red_car->setVelocity(+2, 0);
-            if(sp_red_car->getX() >= (GBA_SCREEN_WIDTH - LIMIT_RIGHT - sp_red_car->getWidth()))
-                sp_red_car->moveTo(GBA_SCREEN_WIDTH - LIMIT_RIGHT - sp_red_car->getWidth(),sp_red_car->getY());
-        } else if (keys & KEY_UP) {
-            sp_red_car->setVelocity(0, -2);
-            if(sp_red_car->getY() <= LIMIT_UP)
-                sp_red_car->moveTo(sp_red_car->getX(), LIMIT_UP);
-        } else if(keys & KEY_DOWN) {
-            sp_red_car->setVelocity(0, +2);
-            if(sp_red_car->getY() >= (GBA_SCREEN_HEIGHT - 18))
-                sp_red_car->moveTo(sp_red_car->getX(), (GBA_SCREEN_HEIGHT - 18));
-        } else {
-            sp_red_car->setVelocity(0, 0);
-        }
-
+        checkCarMovements(keys);
         //Scroller for background
-        scrollY -= 1;
-        bg_track1.get()->scroll(scrollX, scrollY);
-
+        scrollBackGround();
         //Scroller for objects
         checkScrollObjects();
         moveScrollObjects();
-
-        //Timer0; T = 1s
-        if(REG_TM1D != timer0){
-            timer0 = REG_TM1D;
-            TextStream::instance().clear();
-            score++;
-            level++;
-            TextStream::instance().setText(score_str, 0, 1);
-        }
-
-        //Timer1 T < 25ms
-        if(REG_TM3D != timer1 ) {
-            timer1 = REG_TM3D;
-            if(!stopStartMovingCntr){       // count until all the obstacles are moved
-                startMovingCounter++;
-            }
-            obstacleVelocityCntr++;
-        }
+        // update score
+        updateScore(score_str);
+        checkMovingCounter();
     }
     else{
-        TextStream::instance().clear();
-        stopTimer0();
-        stopTimer1();
-        stopScrollingAll();
-        TextStream::instance().setText("YOU DIED",8,12);
-        TextStream::instance().setText("SCORE: ",9,13);
-        TextStream::instance().setText(score_str,9,19);
-
-        if(keys & KEY_START){
-            engine->transitionIntoScene(new StartScene(engine), new FadeOutScene(10));
-        }
+            dead(score_str);
+            if(keys & KEY_START){
+                engine->transitionIntoScene(new StartScene(engine), new FadeOutScene(10));
+            }
     }
-
     //Collision
     checkCollision();
-
-
-    // generate obstacle
-
 }
 
 void RaceScene::createObstacle(uint8_t select) {
@@ -284,22 +226,23 @@ bool RaceScene::checkStartMovingCounter() {
 void RaceScene::checkLevel() {
 
     switch (level) {
-        case 5:
-            setTimer1Value(0x924);
-            break;
         case 10:
-            setTimer1Value(0x666);
-            break;
-        case 15:
-            setTimer1Value(0x333);
-            velocity = 3;
+            setTimer1Value(0xCCD);
             break;
         case 20:
-            setTimer1Value(0x19A);
-            velocity = 3;
+            setTimer1Value(0x924);
             break;
         case 30:
+            setTimer1Value(0x666);
+            break;
+        case 40:
+            setTimer1Value(0x333);
+            break;
+        case 50:
             setTimer1Value(0x19A);
+            break;
+        case 60:
+            setTimer1Value(0xCCD);
             velocity = 3;
             break;
     }
@@ -351,6 +294,28 @@ void RaceScene::checkCollision(){
             checkLife();
         }
         else{isDead = true;}
+    }
+}
+
+void RaceScene::checkCarMovements(u16& keys){
+    if(keys & KEY_LEFT) {
+        sp_red_car->setVelocity(-2 ,0);
+        if(sp_red_car->getX() <= LIMIT_LEFT)
+            sp_red_car->moveTo(LIMIT_LEFT,sp_red_car->getY());
+    } else if(keys & KEY_RIGHT) {
+        sp_red_car->setVelocity(+2, 0);
+        if(sp_red_car->getX() >= (GBA_SCREEN_WIDTH - LIMIT_RIGHT - sp_red_car->getWidth()))
+            sp_red_car->moveTo(GBA_SCREEN_WIDTH - LIMIT_RIGHT - sp_red_car->getWidth(),sp_red_car->getY());
+    } else if (keys & KEY_UP) {
+        sp_red_car->setVelocity(0, -2);
+        if(sp_red_car->getY() <= LIMIT_UP)
+            sp_red_car->moveTo(sp_red_car->getX(), LIMIT_UP);
+    } else if(keys & KEY_DOWN) {
+        sp_red_car->setVelocity(0, +2);
+        if(sp_red_car->getY() >= (GBA_SCREEN_HEIGHT - 18))
+            sp_red_car->moveTo(sp_red_car->getX(), (GBA_SCREEN_HEIGHT - 18));
+    } else {
+        sp_red_car->setVelocity(0, 0);
     }
 }
 
@@ -425,5 +390,56 @@ void RaceScene::stopScrollingAll(){
     scrollX = 0;
     for (int i = 0; i < 6; i++){
         scrollYObj[i] = 0;
+    }
+}
+
+void RaceScene::scrollBackGround(){
+    scrollY -= 1;
+    bg_track1.get()->scroll(scrollX, scrollY);
+}
+
+void RaceScene::updateScore(std::string& score_str){
+    //Timer0; T = 1s
+    if(REG_TM1D != timer0){
+        timer0 = REG_TM1D;
+        TextStream::instance().clear();
+        score++;
+        level++;
+        TextStream::instance().setText(score_str, 0, 1);
+    }
+}
+
+void RaceScene::dead(std::string& score_str){
+
+    TextStream::instance().clear();
+    stopTimer0();
+    stopTimer1();
+    stopScrollingAll();
+    TextStream::instance().setText("YOU DIED",8,12);
+    TextStream::instance().setText("SCORE: ",9,13);
+    TextStream::instance().setText(score_str,9,19);
+}
+
+void RaceScene::checkMovingCounter(){
+    //Timer1 T < 25ms
+    if(REG_TM2D != timer1 ) {
+        timer1 = REG_TM2D;
+        if(!stopStartMovingCntr){       // count until all the obstacles are moved
+            startMovingCounter++;
+        }
+        obstacleVelocityCntr++;
+    }
+}
+
+void RaceScene::enableScrollObstacles(){
+    // unlock (move = true)
+    if(obstacleVelocityCntr == WAITING_TIME) {
+        if (startMove[0]) { Move[0] = true; }
+        if (startMove[1]) { Move[1] = true; }
+        if (startMove[2]) { Move[2] = true; }
+        if (startMove[3]) { Move[3] = true; }
+        if (startMove[4]) { Move[4] = true; }
+        //if (startMove[5]) { Move[5] = true; }
+        obstacleVelocityCntr = 0;
     }
 }
