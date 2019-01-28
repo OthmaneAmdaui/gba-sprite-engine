@@ -35,6 +35,7 @@ private:
     int timer0 = -1;
     int timer1 = -1;
     int score = 0;
+    std::string score_str;
     int life = 5;
     int velocity = 2;
     int waitingTime = 1;
@@ -60,6 +61,8 @@ public:
     void load() override;
     void tick(u16 i) override;
     void createObstacle(uint8_t select);
+    void hit();
+    void dead(u16 keys);
 
 };
 

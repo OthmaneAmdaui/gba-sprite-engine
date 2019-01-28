@@ -157,7 +157,7 @@ void RaceScene::load() {
 }
 
 void RaceScene::tick(u16 keys) {
-    std::string score_str = std::to_string(score);
+    score_str = std::to_string(score);
     /*if( (levelCntr % 3) == 0)
     {
         waitingTime = waitingTime - 2;
@@ -184,12 +184,12 @@ void RaceScene::tick(u16 keys) {
             startMovingCounter = 0;
             stopStartMovingCntr = true; // after last obstacle, doesn't need to count
             break;
-        /*case 50:
-            startMove[5] = true;
-            // after last resset startMovingCounter and stop the counting
-            startMovingCounter = 0;
-            stopStartMovingCntr = true; // after last obstacle, doesn't need to count
-            break;*/
+            /*case 50:
+                startMove[5] = true;
+                // after last resset startMovingCounter and stop the counting
+                startMovingCounter = 0;
+                stopStartMovingCntr = true; // after last obstacle, doesn't need to count
+                break;*/
     }
     // unlock (move = true) so // wachttijd
     if(obstacleVelocityCntr == waitingTime) {
@@ -316,65 +316,70 @@ void RaceScene::tick(u16 keys) {
         }
     }
     else{
-        TextStream::instance().clear();
-        stopTimer0();
-        stopTimer1();
-        scrollY = 0;
-        for (int i = 0; i < 6; i++){
-            scrollObj[i] = 0;
-        }
-        TextStream::instance().setText("YOU DIED",8,12);
-        TextStream::instance().setText("SCORE: ",9,13);
-        TextStream::instance().setText(score_str,9,19);
-
-        if(keys & KEY_START){
-            engine->transitionIntoScene(new StartScene(engine), new FadeOutScene(10));
-        }
+        dead(keys);
     }
 
     //Collision
     isHit_mem = isHit;
     if((sp_red_car->collidesWith(*sp_scrollingCar1)) || (sp_red_car->collidesWith(*sp_scrollingCar2))
-        || (sp_red_car->collidesWith(*sp_scrollingCar3)) || (sp_red_car->collidesWith(*sp_scrollingCar4))
-        || (sp_red_car->collidesWith(*sp_scrollingCar5)) || (sp_red_car->collidesWith(*sp_scrollingCar6)))
+       || (sp_red_car->collidesWith(*sp_scrollingCar3)) || (sp_red_car->collidesWith(*sp_scrollingCar4))
+       || (sp_red_car->collidesWith(*sp_scrollingCar5)) || (sp_red_car->collidesWith(*sp_scrollingCar6)))
     {
         isHit = true;
-
-        //engine.get()->enqueueSound(hit, sizeof(hit), 44100);
+        engine.get()->enqueueSound(fx_hit, sizeof(fx_hit), 44100);
     }
     else{isHit = false;}
 
     if(isHit == true & isHit_mem != true){
-        if(score > 0){score = score - 6;}
-        if (score <= 0){score = 0;}
-        TextStream::instance().setText("-5", 1, 2);
-        if(life > 0){
-            life --;
-            switch (life){
-                case 4:
-                    sp_heart5->moveTo(GBA_SCREEN_HEIGHT,GBA_SCREEN_HEIGHT);
-                    break;
-                case 3:
-                    sp_heart4->moveTo(GBA_SCREEN_HEIGHT,GBA_SCREEN_HEIGHT);
-                    break;
-                case 2:
-                    sp_heart3->moveTo(GBA_SCREEN_HEIGHT,GBA_SCREEN_HEIGHT);
-                    break;
-                case 1:
-                    sp_heart2->moveTo(GBA_SCREEN_HEIGHT,GBA_SCREEN_HEIGHT);
-                    break;
-                case 0:
-                    sp_heart1->moveTo(GBA_SCREEN_HEIGHT,GBA_SCREEN_HEIGHT);
-                    break;
-            }
-        }
-        else{isDead = true;}
+        hit();
     }
 
     // generate obstacle
 
 }
 
+void RaceScene::hit() {
+    if(score > 0){score = score - 6;}
+    if (score <= 0){score = 0;}
+    TextStream::instance().setText("-5", 1, 2);
+    if(life > 0){
+        life --;
+        switch (life){
+            case 4:
+                sp_heart5->moveTo(GBA_SCREEN_HEIGHT,GBA_SCREEN_HEIGHT);
+                break;
+            case 3:
+                sp_heart4->moveTo(GBA_SCREEN_HEIGHT,GBA_SCREEN_HEIGHT);
+                break;
+            case 2:
+                sp_heart3->moveTo(GBA_SCREEN_HEIGHT,GBA_SCREEN_HEIGHT);
+                break;
+            case 1:
+                sp_heart2->moveTo(GBA_SCREEN_HEIGHT,GBA_SCREEN_HEIGHT);
+                break;
+            case 0:
+                sp_heart1->moveTo(GBA_SCREEN_HEIGHT,GBA_SCREEN_HEIGHT);
+                break;
+        }
+    }
+    else{isDead = true;}
+}
+void RaceScene::dead(u16 keys){
+    TextStream::instance().clear();
+    stopTimer0();
+    stopTimer1();
+    scrollY = 0;
+    for (int i = 0; i < 6; i++){
+        scrollObj[i] = 0;
+    }
+    TextStream::instance().setText("YOU DIED",8,12);
+    TextStream::instance().setText("SCORE: ",9,13);
+    TextStream::instance().setText(score_str,9,19);
+
+    if(keys & KEY_START){
+        engine->transitionIntoScene(new StartScene(engine), new FadeOutScene(10));
+    }
+}
 void RaceScene::createObstacle(uint8_t select) {
 
     //srand(time(NULL));
