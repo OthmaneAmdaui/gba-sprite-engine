@@ -54,7 +54,7 @@ void StartScene::tick(u16 keys) {
     switch (sp_arrow->getY()){
         case Y_TOP:
             if((up_pressed == true & up_mem != true) | (down_pressed == true & down_mem != true)){
-                engine.get()->enqueueSound(menuNav, sizeof(menuNav), 44100);
+                engine.get()->enqueueSound(fx_menuNav, sizeof(fx_menuNav), 44100);
                 sp_arrow->moveTo(64, Y_BOTTOM);
             }
             else if(start_pressed == true & start_mem != true) {
@@ -66,7 +66,7 @@ void StartScene::tick(u16 keys) {
             break;
         case Y_BOTTOM:
             if((up_pressed == true & up_mem != true) | (down_pressed == true & down_mem != true)){
-                engine.get()->enqueueSound(menuNav, sizeof(menuNav), 44100);
+                engine.get()->enqueueSound(fx_menuNav, sizeof(fx_menuNav), 44100);
                 sp_arrow->moveTo(64, Y_TOP);
             }
             else if(start_pressed == true & start_mem != true) {
