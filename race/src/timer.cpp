@@ -25,7 +25,7 @@ void setTimer0Value(int value){
 
 
 void initTimer1(){
-    setTimer1Value(0x52);   // 25ms
+    setTimer1Value(0xCCD);   // 25ms
     REG_TM2CNT = TM_FREQ_1024;
     REG_TM3CNT = TM_ENABLE | TM_CASCADE;
 }

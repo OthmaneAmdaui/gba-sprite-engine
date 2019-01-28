@@ -10,6 +10,7 @@
 
 #define LIMIT_RIGHT 29
 #define LIMIT_LEFT 46
+#define LIMIT_UP 2
 #define XMIN 46
 #define XMAX 195
 
@@ -31,14 +32,14 @@ private:
 
     int scrollX, scrollY;
 
-    int scrollObj[5] = {0,0,0,0,0};
+    int scrollYObj[5] = {0,0,0,0,0};
     int timer0 = -1;
     int timer1 = -1;
     int score = 0;
+    int level = 0;
     int life = 5;
-    int velocity = 2;
+    int velocity = 1;
     int waitingTime = 1;
-    int levelCntr = 1;
     int xPos[6] = {XMIN + rand() % ((XMAX + 1) - XMIN),XMIN + rand() % ((XMAX + 1) - XMIN),
                    XMIN + rand() % ((XMAX + 1) - XMIN),XMIN + rand() % ((XMAX + 1) - XMIN),
                    XMIN + rand() % ((XMAX + 1) - XMIN), XMIN + rand() % ((XMAX + 1) - XMIN)};
@@ -59,7 +60,16 @@ public:
 
     void load() override;
     void tick(u16 i) override;
+
     void createObstacle(uint8_t select);
+    void createHearts();
+    bool checkStartMovingCounter();
+    void checkLevel();
+    void checkLife();
+    void checkCollision();
+    void checkScrollObjects();
+    void moveScrollObjects();
+    void stopScrollingAll();
 
 };
 
