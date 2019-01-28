@@ -210,7 +210,7 @@ And hope for exit code 0!
 ### Spelregels
 -> Het doel van het spel is om een zo hoog mogelijke score te halen. Dit doe je door met je race auto obstakels te ontwijken en zo lang mogelijk te overleven. 
 
--> De obstakels worden op random plaatsen gegenereed en naarmate het spel vordert, komen er steeds meer en meer.
+-> De obstakels worden op random plaatsen gegenereed en naarmate het spel vordert, komen ze sneller.
 
 -> Met de pijltjestoetsen kan je de race auto in alle richtingen besturen.
 
@@ -218,5 +218,5 @@ And hope for exit code 0!
 
 -> Je begint met 5 levens en telkens je een obstakel raakt, gaat er 1 leven af. Je kan maximaal 1 leven en een score van 5 per seconde verliezen. 
 
--> Wanneer je 0 levens hebt en je raakt een obstakel ben je dood en kan je opnieuw spelen.
+-> Wanneer je 0 levens hebt en je raakt een obstakel ben je dood en kan je opnieuw spelen door op start te drukken.
 
