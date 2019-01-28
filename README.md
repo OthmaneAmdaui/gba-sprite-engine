@@ -207,7 +207,7 @@ After compiling, execute the `unittest` main executable:
 
 And hope for exit code 0!
 
-#### Spelregels
+### Spelregels
 -> Het doel van het spel is om een zo hoog mogelijke score te halen. Dit doe je door met je race auto obstakels te ontwijken en zo lang mogelijk te overleven. 
 
 -> De obstakels worden op random plaatsen gegenereed.
