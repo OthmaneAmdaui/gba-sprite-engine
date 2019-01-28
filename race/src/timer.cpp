@@ -1,6 +1,5 @@
-//
-// Created by Lukas on 10/12/2018.
 // Source: http://www.coranac.com/tonc/text/timers.htm
+// Created by Lukas on 10/12/2018.
 //
 #include <libgba-sprite-engine/gba_engine.h>
 #include "timer.h"
@@ -22,7 +21,6 @@ void toggleTimer0(){
 void setTimer0Value(int value){
     REG_TM0D = -value;
 }
-
 
 void initTimer1(){
     setTimer1Value(0xCCD);   // 25ms

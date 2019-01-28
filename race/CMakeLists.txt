@@ -2,17 +2,17 @@ project(race)
 
 add_executable(${PROJECT_NAME}.elf
         src/main.cpp
-        src/RaceScene.cpp
-        src/RaceScene.h
+        src/raceScene.cpp
+        src/raceScene.h
         src/track1.h
         src/timer.cpp
         src/timer.h
-        src/StartScene.h
-        src/StartScene.cpp
+        src/startScene.h
+        src/startScene.cpp
         src/sprite_data.h
-        src/ChooseCarScene.h
-        src/ChooseCarScene.cpp
-        src/Game.h src/soundFx_hit.h src/soundFx_menuNav.h)
+        src/chooseCarScene.h
+        src/chooseCarScene.cpp
+        src/game.h src/soundFx_hit.h src/soundFx_menuNav.h)
 
 
 

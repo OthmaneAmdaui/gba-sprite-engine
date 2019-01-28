@@ -5,12 +5,12 @@
 #include <libgba-sprite-engine/gba_engine.h>
 #include <libgba-sprite-engine/scene.h>
 
-#include "StartScene.h"
+#include "startScene.h"
 
 int main() {
     std::shared_ptr<GBAEngine> engine(new GBAEngine());
 
-    //auto game = new Game();
+    //auto game = new game();
 
     auto *startScene = new StartScene(engine);
 
