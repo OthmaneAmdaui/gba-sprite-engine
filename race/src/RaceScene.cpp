@@ -21,7 +21,7 @@
 
 std::vector<Sprite *> RaceScene::sprites() {
     return {
-            sp_red_car.get(),
+            sp_car.get(),
             sp_scrollingCar1.get(),
             sp_scrollingCar2.get(),
             sp_scrollingCar3.get(),
@@ -50,14 +50,7 @@ void RaceScene::load() {
     bg_track1 = std::unique_ptr<Background>(new Background(1, track_data, sizeof(track_data), track1, sizeof(track1)));
     bg_track1.get()->useMapScreenBlock(16);
 
-    SpriteBuilder<Sprite> builder;
-    sp_red_car = builder
-            .withData(red_carTiles, sizeof(red_carTiles))
-            .withSize(SIZE_16_16)
-            .withLocation(GBA_SCREEN_WIDTH/4, GBA_SCREEN_HEIGHT/2)
-                    //.withinBounds()
-            .buildPtr();
-
+    createCar(chosen_car);
     srand(time(NULL));
     createObstacle(1);
     createObstacle(2);
@@ -99,11 +92,65 @@ void RaceScene::tick(u16 keys) {
     else{
             dead(score_str);
             if(keys & KEY_START){
-                engine->transitionIntoScene(new StartScene(engine), new FadeOutScene(10));
+                engine->transitionIntoScene(new StartScene(engine, 1), new FadeOutScene(10));
             }
     }
     //Collision
     checkCollision();
+}
+void RaceScene::createCar(int chosen_car) {
+    SpriteBuilder<Sprite> builder;
+
+    switch (chosen_car){
+        case 1:
+            sp_car = builder
+                    .withData(red_carTiles, sizeof(red_carTiles))
+                    .withSize(SIZE_16_16)
+                    .withLocation(GBA_SCREEN_WIDTH/4, GBA_SCREEN_HEIGHT/2)
+                            //.withinBounds()
+                    .buildPtr();
+            break;
+        case 2:
+            sp_car = builder
+                    .withData(blue_carTiles, sizeof(blue_carTiles))
+                    .withSize(SIZE_16_16)
+                    .withLocation(GBA_SCREEN_WIDTH/4, GBA_SCREEN_HEIGHT/2)
+                            //.withinBounds()
+                    .buildPtr();
+            break;
+        case 3:
+            sp_car = builder
+                    .withData(green_carTiles, sizeof(green_carTiles))
+                    .withSize(SIZE_16_16)
+                    .withLocation(GBA_SCREEN_WIDTH/4, GBA_SCREEN_HEIGHT/2)
+                            //.withinBounds()
+                    .buildPtr();
+            break;
+        case 4:
+            sp_car = builder
+                    .withData(purple_carTiles, sizeof(purple_carTiles))
+                    .withSize(SIZE_16_16)
+                    .withLocation(GBA_SCREEN_WIDTH/4, GBA_SCREEN_HEIGHT/2)
+                            //.withinBounds()
+                    .buildPtr();
+            break;
+        case 5:
+            sp_car = builder
+                    .withData(turquoise_carTiles, sizeof(turquoise_carTiles))
+                    .withSize(SIZE_16_16)
+                    .withLocation(GBA_SCREEN_WIDTH/4, GBA_SCREEN_HEIGHT/2)
+                            //.withinBounds()
+                    .buildPtr();
+            break;
+        case 6:
+            sp_car = builder
+                    .withData(mustard_carTiles, sizeof(mustard_carTiles))
+                    .withSize(SIZE_16_16)
+                    .withLocation(GBA_SCREEN_WIDTH/4, GBA_SCREEN_HEIGHT/2)
+                            //.withinBounds()
+                    .buildPtr();
+            break;
+    }
 }
 
 void RaceScene::createObstacle(uint8_t select) {
@@ -275,9 +322,9 @@ void RaceScene::checkLife() {
 
 void RaceScene::checkCollision(){
     isHit_mem = isHit;
-    if((sp_red_car->collidesWith(*sp_scrollingCar1)) || (sp_red_car->collidesWith(*sp_scrollingCar2))
-       || (sp_red_car->collidesWith(*sp_scrollingCar3)) || (sp_red_car->collidesWith(*sp_scrollingCar4))
-       || (sp_red_car->collidesWith(*sp_scrollingCar5)) || (sp_red_car->collidesWith(*sp_scrollingCar6)))
+    if((sp_car->collidesWith(*sp_scrollingCar1)) || (sp_car->collidesWith(*sp_scrollingCar2))
+       || (sp_car->collidesWith(*sp_scrollingCar3)) || (sp_car->collidesWith(*sp_scrollingCar4))
+       || (sp_car->collidesWith(*sp_scrollingCar5)) || (sp_car->collidesWith(*sp_scrollingCar6)))
     {
         isHit = true;
 
@@ -299,23 +346,23 @@ void RaceScene::checkCollision(){
 
 void RaceScene::checkCarMovements(u16& keys){
     if(keys & KEY_LEFT) {
-        sp_red_car->setVelocity(-2 ,0);
-        if(sp_red_car->getX() <= LIMIT_LEFT)
-            sp_red_car->moveTo(LIMIT_LEFT,sp_red_car->getY());
+        sp_car->setVelocity(-2 ,0);
+        if(sp_car->getX() <= LIMIT_LEFT)
+            sp_car->moveTo(LIMIT_LEFT,sp_car->getY());
     } else if(keys & KEY_RIGHT) {
-        sp_red_car->setVelocity(+2, 0);
-        if(sp_red_car->getX() >= (GBA_SCREEN_WIDTH - LIMIT_RIGHT - sp_red_car->getWidth()))
-            sp_red_car->moveTo(GBA_SCREEN_WIDTH - LIMIT_RIGHT - sp_red_car->getWidth(),sp_red_car->getY());
+        sp_car->setVelocity(+2, 0);
+        if(sp_car->getX() >= (GBA_SCREEN_WIDTH - LIMIT_RIGHT - sp_car->getWidth()))
+            sp_car->moveTo(GBA_SCREEN_WIDTH - LIMIT_RIGHT - sp_car->getWidth(),sp_car->getY());
     } else if (keys & KEY_UP) {
-        sp_red_car->setVelocity(0, -2);
-        if(sp_red_car->getY() <= LIMIT_UP)
-            sp_red_car->moveTo(sp_red_car->getX(), LIMIT_UP);
+        sp_car->setVelocity(0, -2);
+        if(sp_car->getY() <= LIMIT_UP)
+            sp_car->moveTo(sp_car->getX(), LIMIT_UP);
     } else if(keys & KEY_DOWN) {
-        sp_red_car->setVelocity(0, +2);
-        if(sp_red_car->getY() >= (GBA_SCREEN_HEIGHT - 18))
-            sp_red_car->moveTo(sp_red_car->getX(), (GBA_SCREEN_HEIGHT - 18));
+        sp_car->setVelocity(0, +2);
+        if(sp_car->getY() >= (GBA_SCREEN_HEIGHT - 18))
+            sp_car->moveTo(sp_car->getX(), (GBA_SCREEN_HEIGHT - 18));
     } else {
-        sp_red_car->setVelocity(0, 0);
+        sp_car->setVelocity(0, 0);
     }
 }
 

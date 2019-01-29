@@ -12,7 +12,7 @@ int main() {
 
     //auto game = new game();
 
-    auto *startScene = new StartScene(engine);
+    auto *startScene = new StartScene(engine, 1);
 
     //auto *chooseCarScene = new ChooseCarScene(engine);
     //auto *raceScene = new RaceScene(engine);

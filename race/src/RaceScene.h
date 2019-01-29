@@ -17,7 +17,7 @@
 
 class RaceScene : public Scene{
 private:
-    std::unique_ptr<Sprite> sp_red_car;
+    std::unique_ptr<Sprite> sp_car;
     std::unique_ptr<Sprite> sp_scrollingCar1;
     std::unique_ptr<Sprite> sp_scrollingCar2;
     std::unique_ptr<Sprite> sp_scrollingCar3;
@@ -50,9 +50,10 @@ private:
     bool isHit = false;
     bool isHit_mem = false;
     bool isDead = false;
+    int chosen_car = 1;
 
 public:
-    RaceScene(std::shared_ptr<GBAEngine> engine) : Scene(engine), scrollX(0), scrollY(0){}
+    RaceScene(std::shared_ptr<GBAEngine> engine, int car) : Scene(engine), chosen_car(car), scrollX(0), scrollY(0){}
 
     std::vector<Sprite *> sprites() override;
     std::vector<Background *> backgrounds() override;
@@ -60,6 +61,7 @@ public:
     void load() override;
     void tick(u16 i) override;
 
+    void createCar(int chosen_car);
     void createObstacle(uint8_t select);
     void createHearts();
     bool checkStartMovingCounter();

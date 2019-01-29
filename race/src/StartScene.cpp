@@ -31,7 +31,6 @@ void StartScene::load() {
             .withData(arrowTiles, sizeof(arrowTiles))
             .withSize(SIZE_16_16)
             .withLocation(64, 36)
-            //.withinBounds()
             .buildPtr();
 
     TextStream::instance().setText("START GAME", 5, 10);
@@ -60,7 +59,7 @@ void StartScene::tick(u16 keys) {
             else if(start_pressed == true & start_mem != true) {
                 //if (!engine->isTransitioning()) {
                     TextStream::instance().setText("Prepare for the race!!!",0,0);
-                    engine->transitionIntoScene(new RaceScene(engine), new FadeOutScene(2));
+                    engine->transitionIntoScene(new RaceScene(engine, chosen_car), new FadeOutScene(2));
                 //}
             }
             break;

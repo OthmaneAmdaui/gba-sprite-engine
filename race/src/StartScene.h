@@ -21,13 +21,14 @@ private:
     bool down_mem = false;
     bool start_pressed = false;
     bool start_mem = false;
+    int chosen_car = 1;
 
 public:
 
     std::vector<Sprite *> sprites() override;
     std::vector<Background *> backgrounds() override;
 
-    StartScene(std::shared_ptr<GBAEngine> engine) : Scene(engine){}
+    StartScene(std::shared_ptr<GBAEngine> engine, int car) : Scene(engine), chosen_car(car){}
 
     void load() override;
     void tick(u16 keys) override;
